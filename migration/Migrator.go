@@ -1,18 +1,15 @@
-package database
+package migration
 
 import (
-	"RyftFramework/framework"
+	"RyftFramework/configuration"
+	"RyftFramework/database"
 	"RyftFramework/models"
 	"RyftFramework/utils"
-	"fmt"
 	"github.com/BurntSushi/toml"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 	"log"
 )
 
-var config framework.Configuration
-var db *gorm.DB
+var config configuration.Configuration
 
 func RunMigrator(fresh bool, seed bool) {
 	utils.LoadLogger()
@@ -27,7 +24,7 @@ func RunMigrator(fresh bool, seed bool) {
 	doMigrations()
 
 	if seed {
-		utils.InfoLogger.Println("Seeding the database..")
+		utils.InfoLogger.Println("Seeding the migration..")
 		runSeeder()
 	}
 
@@ -40,7 +37,7 @@ func RunMigrator(fresh bool, seed bool) {
 func dropAllTables() {
 	for _, model := range models.RegisteredModels() {
 		utils.InfoLogger.Println("Dropping table for model: ", model.Name)
-		err := db.Migrator().DropTable(model.Model)
+		err := database.DB.Migrator().DropTable(model.Model)
 
 		if err != nil {
 			utils.ErrorLogger.Println("Failed to drop table for model: ", model.Name)
@@ -54,7 +51,7 @@ func dropAllTables() {
 func doMigrations() {
 	for _, model := range models.RegisteredModels() {
 		utils.InfoLogger.Println("Migrating the model: ", model.Name)
-		err := db.Migrator().CreateTable(model.Model)
+		err := database.DB.Migrator().CreateTable(model.Model)
 
 		if err != nil {
 			utils.ErrorLogger.Println("Failed to create table for model: ", model.Name)
@@ -74,14 +71,5 @@ func bootstrap() {
 		log.Fatalln("Failed to load framework config file!", err)
 	}
 
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-		config.Database.Username,
-		config.Database.Password,
-		config.Database.Host,
-		config.Database.Port,
-		config.Database.Name,
-	)
-	database, _ := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-
-	db = database
+	database.ConnectDatabase()
 }

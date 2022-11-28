@@ -17,11 +17,16 @@ func RegisteredModels() []Model {
 					user := User{
 						Name:     gofakeit.Name(),
 						Email:    gofakeit.Email(),
-						Password: gofakeit.Password(true, true, true, true, true, 32),
+						Password: utils.HashPassword("password"),
 					}
 					return db.Create(&user).Error
 				},
 			},
+		},
+		{
+			Name:   "Personal Access Token",
+			Model:  PersonalAccessToken{},
+			Seeder: nil,
 		},
 	}
 }

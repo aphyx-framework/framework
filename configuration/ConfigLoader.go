@@ -1,4 +1,4 @@
-package framework
+package configuration
 
 import (
 	"github.com/BurntSushi/toml"
@@ -41,14 +41,14 @@ type Configuration struct {
 
 var ApplicationConfig Configuration
 
-// loadConfigFile ---
+// LoadConfigFile ---
 //
 // This function is used to load the configuration file
 // Ryft by default uses TOML as the configuration file format
 // It looks for the config file in the root directory
-func loadConfigFile() {
+func LoadConfigFile() {
 
-	_, err := toml.DecodeFile("./config.toml", &ApplicationConfig)
+	_, err := toml.DecodeFile("./configuration/config.toml", &ApplicationConfig)
 
 	if err != nil {
 		log.Fatalln("Failed to load framework config file!", err)

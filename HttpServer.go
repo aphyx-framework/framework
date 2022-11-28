@@ -1,6 +1,9 @@
-package framework
+package main
 
 import (
+	"RyftFramework/configuration"
+	"RyftFramework/database"
+	"RyftFramework/routing"
 	"RyftFramework/utils"
 	"fmt"
 	"github.com/TwiN/go-color"
@@ -13,22 +16,21 @@ import (
 // This bootstrapper is responsible for initializing the framework
 // and setting up the required dependencies.
 func BootstrapFramework() {
-
 	app := fiber.New(fiber.Config{
 		DisableStartupMessage: true,
-		AppName:               ApplicationConfig.Application.Name,
+		AppName:               configuration.ApplicationConfig.Application.Name,
 	})
 	printAsciiArt()
-	loadConfigFile()
-	loadRouter(app)
+	configuration.LoadConfigFile()
+	routing.LoadRouter(app)
 	utils.LoadLogger()
 	checkSecurityConfig()
 	checkAuthenticationConfig()
-	connectDatabase()
+	database.ConnectDatabase()
 	printEnabledFeature()
 
-	utils.InfoLogger.Print("Application started on port " + ApplicationConfig.Application.Port)
-	err := app.Listen(":" + ApplicationConfig.Application.Port)
+	utils.InfoLogger.Print("Application started on port " + configuration.ApplicationConfig.Application.Port)
+	err := app.Listen(":" + configuration.ApplicationConfig.Application.Port)
 
 	if err != nil {
 		log.Fatalln(err)
@@ -43,19 +45,19 @@ func BootstrapFramework() {
 // If feature is disabled, it will show a red cross mark
 func printEnabledFeature() {
 	println("Enabled features: ")
-	if ApplicationConfig.Database.Enabled {
+	if configuration.ApplicationConfig.Database.Enabled {
 		println(color.GreenBackground + color.Black + " [✓] Database " + color.Reset)
 	} else {
 		println(color.RedBackground + color.Black + " [X] Database " + color.Reset)
 	}
 
-	if ApplicationConfig.Authentication.Enabled {
+	if configuration.ApplicationConfig.Authentication.Enabled {
 		println(color.GreenBackground + color.Black + " [✓] Authentication " + color.Reset)
 	} else {
 		println(color.RedBackground + color.Black + " [X] Authentication " + color.Reset)
 	}
 
-	if ApplicationConfig.Caching.Enabled {
+	if configuration.ApplicationConfig.Caching.Enabled {
 		println(color.GreenBackground + color.Black + " [✓] Caching " + color.Reset)
 	} else {
 		println(color.RedBackground + color.Black + " [X] Caching " + color.Reset)
@@ -68,11 +70,11 @@ func printEnabledFeature() {
 // It is a basic check to make sure that the secret key is set
 // And you didn't enable debug mode in production
 func checkSecurityConfig() {
-	if ApplicationConfig.Security.Key == "" {
+	if configuration.ApplicationConfig.Security.Key == "" {
 		utils.ErrorLogger.Fatalln("Security key is not set")
 	}
 
-	if ApplicationConfig.Security.DebugMode == true && ApplicationConfig.Security.Production == true {
+	if configuration.ApplicationConfig.Security.DebugMode == true && configuration.ApplicationConfig.Security.Production == true {
 		utils.WarningLogger.Print("Debug mode is enabled in production mode")
 	}
 }
@@ -81,13 +83,13 @@ func checkSecurityConfig() {
 //
 // This function is responsible for checking the authentication config.
 // For authentication to work, a valid URL and key must be set
-// And database must be enabled
+// And migration must be enabled
 func checkAuthenticationConfig() {
-	if ApplicationConfig.Authentication.Enabled == true && ApplicationConfig.Authentication.AuthenticationUrl == "" {
+	if configuration.ApplicationConfig.Authentication.Enabled == true && configuration.ApplicationConfig.Authentication.AuthenticationUrl == "" {
 		utils.ErrorLogger.Fatalln("Authentication URL is not set")
 	}
 
-	if ApplicationConfig.Authentication.Enabled == true && ApplicationConfig.Database.Enabled == false {
+	if configuration.ApplicationConfig.Authentication.Enabled == true && configuration.ApplicationConfig.Database.Enabled == false {
 		utils.ErrorLogger.Fatalln("Database must be enabled to use authentication")
 	}
 }

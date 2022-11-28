@@ -1,4 +1,4 @@
-config.toml
+configuration/config.toml
 build
 tmp
 .idea

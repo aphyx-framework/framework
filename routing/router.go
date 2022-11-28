@@ -1,41 +1,41 @@
-package framework
+package routing
 
 import (
-	"RyftFramework/routes"
+	"RyftFramework/configuration"
 	"RyftFramework/utils"
 	"github.com/gofiber/fiber/v2"
 	"net/http"
 )
 
-// loadRouter ---
+// LoadRouter ---
 //
-// This function is responsible for loading all the routes.
-// It will load the API routes and the Authentication routes
+// This function is responsible for loading all the routing.
+// It will load the API routing and the Authentication routing
 // It also supports middleware
-func loadRouter(app *fiber.App) {
+func LoadRouter(app *fiber.App) {
 	loadAuthRoute(app)
 	loadApiRoutes(app)
 }
 
 // loadApiRoutes --
 //
-// This function is responsible for loading all the API routes.
-// Ryft is primarily an API framework so all the routes are loaded here
+// This function is responsible for loading all the API routing.
+// Ryft is primarily an API framework so all the routing are loaded here
 func loadApiRoutes(app *fiber.App) {
 	apiRoutes := app.Group("/api")
-	routes.ApiRoutes(apiRoutes)
+	ApiRoutes(apiRoutes)
 }
 
 // loadAuthRoute --
 //
-// This function is responsible for loading all the Authentication routes.
-// If auth is enabled, then the auth routes will be loaded
+// This function is responsible for loading all the Authentication routing.
+// If auth is enabled, then the auth routing will be loaded
 // If not, then it will return a 404
 func loadAuthRoute(app *fiber.App) {
-	auth := app.Group(ApplicationConfig.Authentication.AuthenticationUrl)
+	auth := app.Group(configuration.ApplicationConfig.Authentication.AuthenticationUrl)
 	auth.Use(func(c *fiber.Ctx) error {
-		if ApplicationConfig.Authentication.Enabled == false {
-			if ApplicationConfig.Security.DebugMode == true {
+		if configuration.ApplicationConfig.Authentication.Enabled == false {
+			if configuration.ApplicationConfig.Security.DebugMode == true {
 				utils.ErrorLogger.Print("Trying to access authentication route while authentication is disabled")
 				return c.Status(http.StatusInternalServerError).JSON(utils.HttpResponse{
 					Success: false,
@@ -52,12 +52,12 @@ func loadAuthRoute(app *fiber.App) {
 		return c.Next()
 	})
 
-	if ApplicationConfig.Authentication.Enabled == false {
+	if configuration.ApplicationConfig.Authentication.Enabled == false {
 		// Catch all route when authentication is disabled
 		auth.All("*", func(c *fiber.Ctx) error {
 			return c.SendString("")
 		})
 	}
 
-	routes.AuthRoutes(auth)
+	AuthRoutes(auth)
 }

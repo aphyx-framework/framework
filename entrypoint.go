@@ -1,8 +1,7 @@
 package main
 
 import (
-	"RyftFramework/database"
-	"RyftFramework/framework"
+	"RyftFramework/migration"
 	"flag"
 	"os"
 )
@@ -10,14 +9,22 @@ import (
 func main() {
 	migratorFlag := flag.NewFlagSet("migrate", flag.ExitOnError)
 	fresh := migratorFlag.Bool("fresh", false, "Drop all table defined in RegisterModel")
-	seed := migratorFlag.Bool("seed", false, "Seed the database with data defined in the seeder")
+	seed := migratorFlag.Bool("seed", false, "Seed the migration with data defined in the seeder")
 
-	if os.Args[1] == "migrate" {
-		if err := migratorFlag.Parse(os.Args[2:]); err == nil {
-			database.RunMigrator(*fresh, *seed)
+	if len(os.Args) < 2 {
+		// If no argument is passed, start the server
+		BootstrapFramework()
+	}
+
+	switch os.Args[1] {
+	case "migrate":
+		err := migratorFlag.Parse(os.Args[2:])
+		if err != nil {
+			panic(err)
 		}
-	} else {
-		framework.BootstrapFramework()
+		migration.RunMigrator(*fresh, *seed)
+	default:
+		panic("Unknown command")
 	}
 
 }

@@ -18,7 +18,7 @@ production = true
 
 # --- Database config. Currently only MySQL is supported
 [database]
-# Set this to true if you want to use a database
+# Set this to true if you want to use a migration
 enabled = true
 # Database host
 host = "127.0.0.1"

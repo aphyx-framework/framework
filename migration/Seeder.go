@@ -1,6 +1,7 @@
-package database
+package migration
 
 import (
+	"RyftFramework/database"
 	"RyftFramework/models"
 	"RyftFramework/utils"
 )
@@ -17,7 +18,7 @@ func runSeeder() {
 
 func doSeeding(seed utils.SeederDefinition) {
 	for i := 0; i < seed.Amount; i++ {
-		err := seed.Run(db)
+		err := seed.Run(database.DB)
 		if err != nil {
 			utils.ErrorLogger.Fatalln(err)
 		}

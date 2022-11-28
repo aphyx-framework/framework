@@ -1,0 +1,49 @@
+# --- Application-spesific config go here
+[application]
+# Set the name of your application
+name = "MyApp"
+# Set the port to listen on
+port = "8080"
+
+# --- Security config
+# --- This handle encryption and hashing
+[security]
+# 32 character key. Please generate one.
+# This will be used for hashing and encryption
+key = ""
+# If set to true, this will enable verbose logging
+debug_mode = true
+# Set this to true when you are ready to go live
+production = true
+
+# --- Database config. Currently only MySQL is supported
+[database]
+# Set this to true if you want to use a database
+enabled = true
+# Database host
+host = "127.0.0.1"
+# Database port
+port = 3306
+# Database Username
+username = "root"
+# Database password
+password = ""
+# Database name
+name = ""
+
+# --- Authentication config.
+# --- This framework shipped with a built-in authentication system
+[authentication]
+# Set this to true if you want to
+# use the built-in authentication system
+enabled = false
+# The URL that the authentication system
+# will be mounted on
+authentication_url = "/auth"
+
+# --- Caching config. This framework shipped with a built-in caching system
+# --- The caching config is opinionated, and will use memory storage
+[caching]
+# Set this to true if you want to use
+# the built-in caching system
+enabled = true

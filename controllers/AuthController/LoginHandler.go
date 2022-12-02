@@ -11,6 +11,7 @@ import (
 type UserLogin struct {
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required"`
+	Remember bool   `json:"remember"`
 }
 
 func LoginHandler(c *fiber.Ctx) error {
@@ -24,8 +25,8 @@ func LoginHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(utils.HttpResponse{
 			Success: false,
-			Message: err.Error(),
-			Data:    nil,
+			Message: "Validation error",
+			Data:    utils.GetErrors(err),
 		})
 	}
 
@@ -39,10 +40,20 @@ func LoginHandler(c *fiber.Ctx) error {
 		})
 	}
 
+	token, err := models.PersonalAccessToken{}.CreateTokenForUser(*getUser, "Personal Access Token", user.Remember)
+
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(utils.HttpResponse{
+			Success: false,
+			Message: err.Error(),
+			Data:    nil,
+		})
+	}
+
 	return c.Status(fiber.StatusOK).JSON(utils.HttpResponse{
 		Success: true,
-		Message: "Login success",
-		Data:    getUser,
+		Message: "Token generated successfully",
+		Data:    token,
 	})
 
 }

@@ -11,4 +11,5 @@ import (
 // If authentication is not enabled, this will not be called
 func AuthRoutes(route fiber.Router) {
 	route.Post("/login", AuthController.LoginHandler)
+	route.Get("/user", AuthController.UserHandler)
 }

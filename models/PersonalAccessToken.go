@@ -16,7 +16,15 @@ type PersonalAccessToken struct {
 	ExpiresAt time.Time `gorm:"not null" json:"expires_at"`
 }
 
-func (_ PersonalAccessToken) CreateTokenForUser(user User, name string, permanent bool) (PersonalAccessToken, error) {
+type PersonalAccessTokenResponse struct {
+	ID        uint      `json:"id"`
+	UserID    uint      `json:"user_id"`
+	Name      string    `json:"name"`
+	Token     string    `json:"token"`
+	ExpiresAt time.Time `json:"expires_at"`
+}
+
+func (_ PersonalAccessToken) CreateTokenForUser(user User, name string, permanent bool) (PersonalAccessTokenResponse, error) {
 	plaintextToken := utils.RandStringRunes(40)
 
 	var expiry time.Time
@@ -29,16 +37,23 @@ func (_ PersonalAccessToken) CreateTokenForUser(user User, name string, permanen
 		expiry = time.Now().AddDate(0, 1, 0)
 	}
 
+	tokenEnc, err := utils.EncryptString(plaintextToken)
+
+	if err != nil {
+		return PersonalAccessTokenResponse{}, err
+	}
+
 	token := PersonalAccessToken{
 		UserID:    user.ID,
 		Name:      name,
-		Token:     utils.HashPassword(plaintextToken),
+		Token:     tokenEnc,
 		ExpiresAt: expiry,
 	}
 
-	err := database.DB.Create(&token).Error
+	err = database.DB.Create(&token).Error
 
-	return PersonalAccessToken{
+	return PersonalAccessTokenResponse{
+		ID:        token.ID,
 		UserID:    user.ID,
 		Name:      name,
 		Token:     plaintextToken,

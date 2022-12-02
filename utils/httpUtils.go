@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"github.com/go-playground/validator"
 	"net/url"
 )
 
@@ -15,6 +16,12 @@ type HttpResponse struct {
 	Data    interface{} `json:"data"`
 }
 
+type ErrorResponse struct {
+	FailedField string `json:"failed_field"`
+	Tag         string `json:"tag"`
+	Value       string `json:"value"`
+}
+
 func DecodeUrlParam(param string) string {
 	decoded, err := url.QueryUnescape(param)
 
@@ -23,4 +30,18 @@ func DecodeUrlParam(param string) string {
 	}
 
 	return decoded
+}
+
+func GetErrors(err error) []*ErrorResponse {
+	var errors []*ErrorResponse
+
+	for _, err := range err.(validator.ValidationErrors) {
+		var element ErrorResponse
+		element.FailedField = err.StructNamespace()
+		element.Tag = err.Tag()
+		element.Value = err.Value().(string)
+		errors = append(errors, &element)
+	}
+
+	return errors
 }

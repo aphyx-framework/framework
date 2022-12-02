@@ -1,6 +1,11 @@
 package utils
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	"RyftFramework/configuration"
+	"crypto/aes"
+	"encoding/hex"
+	"golang.org/x/crypto/bcrypt"
+)
 
 // HashPassword ---
 //
@@ -19,4 +24,19 @@ func HashPassword(password string) string {
 func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
+}
+
+func EncryptString(plainText string) (string, error) {
+
+	c, err := aes.NewCipher([]byte(configuration.ApplicationConfig.Security.Key))
+
+	if err != nil {
+		ErrorLogger.Print(err)
+		return "", err
+	}
+
+	msgByte := make([]byte, len(plainText))
+	c.Encrypt(msgByte, []byte(plainText))
+	return hex.EncodeToString(msgByte), nil
+
 }

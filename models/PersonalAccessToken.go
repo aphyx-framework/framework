@@ -24,6 +24,21 @@ type PersonalAccessTokenResponse struct {
 	ExpiresAt time.Time `json:"expires_at"`
 }
 
+func (pat PersonalAccessToken) Logout() error {
+	return database.DB.Delete(&pat).Error
+}
+
+func (_ PersonalAccessToken) RevokeToken(token string) error {
+
+	tokenEnc, err := utils.EncryptString(token)
+
+	if err != nil {
+		return err
+	}
+
+	return database.DB.Delete(&PersonalAccessToken{}, "token = ?", tokenEnc).Error
+}
+
 func (_ PersonalAccessToken) CreateTokenForUser(user User, name string, permanent bool) (PersonalAccessTokenResponse, error) {
 	plaintextToken := utils.RandStringRunes(40)
 

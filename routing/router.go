@@ -2,6 +2,7 @@ package routing
 
 import (
 	"RyftFramework/configuration"
+	"RyftFramework/middlewares"
 	"RyftFramework/utils"
 	"github.com/gofiber/fiber/v2"
 	"net/http"
@@ -59,5 +60,35 @@ func loadAuthRoute(app *fiber.App) {
 		})
 	}
 
+	loginAuth := app.Group(configuration.ApplicationConfig.Authentication.AuthenticationUrl + "/user")
+	loginAuth.Use(func(c *fiber.Ctx) error {
+		if configuration.ApplicationConfig.Authentication.Enabled == false {
+			if configuration.ApplicationConfig.Security.DebugMode == true {
+				utils.ErrorLogger.Print("Trying to access authentication route while authentication is disabled")
+				return c.Status(http.StatusInternalServerError).JSON(utils.HttpResponse{
+					Success: false,
+					Message: "Authentication is not enabled. Check your config.toml file!",
+					Data:    nil,
+				})
+			}
+			return c.Status(http.StatusNotFound).JSON(utils.HttpResponse{
+				Success: false,
+				Message: "Not found",
+				Data:    nil,
+			})
+		}
+		return c.Next()
+	})
+
+	if configuration.ApplicationConfig.Authentication.Enabled == false {
+		// Catch all route when authentication is disabled
+		loginAuth.All("*", func(c *fiber.Ctx) error {
+			return c.SendString("")
+		})
+	}
+
+	loginAuth.Use(middlewares.WithAuthenticationData)
+
+	AuthThatNeedsLogin(loginAuth)
 	AuthRoutes(auth)
 }

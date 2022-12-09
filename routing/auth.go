@@ -11,5 +11,12 @@ import (
 // If authentication is not enabled, this will not be called
 func AuthRoutes(route fiber.Router) {
 	route.Post("/login", AuthController.LoginHandler)
-	route.Get("/user", AuthController.UserHandler)
+	route.Post("/register", AuthController.RegisterHandler)
+}
+
+// AuthThatNeedsLogin ---
+// This route requires authentication
+func AuthThatNeedsLogin(route fiber.Router) {
+	route.Get("/", AuthController.UserHandler)
+	route.Delete("/logout", AuthController.LogoutHandler)
 }

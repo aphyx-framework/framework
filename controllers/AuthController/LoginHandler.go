@@ -4,49 +4,38 @@ import (
 	"RyftFramework/models"
 	"RyftFramework/utils"
 	"encoding/json"
-	"github.com/go-playground/validator"
+	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/gofiber/fiber/v2"
 )
 
 type UserLogin struct {
-	Email    string `json:"email" validate:"required,email"`
-	Password string `json:"password" validate:"required"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
 	Remember bool   `json:"remember"`
 }
 
 func LoginHandler(c *fiber.Ctx) error {
 
-	var user UserLogin
-	_ = json.Unmarshal(c.Body(), &user)
+	var user UserLogin                  // Create a new instance of the UserLogin struct
+	_ = json.Unmarshal(c.Body(), &user) // Unmarshal the request body into the struct
 
-	validate := validator.New()
-	err := validate.Struct(user)
-
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(utils.HttpResponse{
-			Success: false,
-			Message: "Validation error",
-			Data:    utils.GetErrors(err),
-		})
-	}
-
-	getUser, err := models.User{}.Login(user.Email, user.Password)
+	err := user.performValidation() // Perform validation on the struct
 
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(utils.HttpResponse{
 			Success: false,
 			Message: err.Error(),
-			Data:    nil,
+			Data:    err,
 		})
 	}
 
-	token, err := models.PersonalAccessToken{}.CreateTokenForUser(*getUser, "Personal Access Token", user.Remember)
+	token, err := user.performLogin() // Perform login
 
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(utils.HttpResponse{
 			Success: false,
 			Message: err.Error(),
-			Data:    nil,
+			Data:    err,
 		})
 	}
 
@@ -56,4 +45,28 @@ func LoginHandler(c *fiber.Ctx) error {
 		Data:    token,
 	})
 
+}
+
+func (u UserLogin) performValidation() error {
+	return validation.ValidateStruct(&u,
+		validation.Field(&u.Email, validation.Required, validation.Length(1, 255)),
+		validation.Field(&u.Password, validation.Required, validation.Length(1, 255)),
+		validation.Field(&u.Remember, validation.In(true, false)),
+	)
+}
+
+func (u UserLogin) performLogin() (*models.PersonalAccessTokenResponse, error) {
+	getUser, err := models.User{}.Login(u.Email, u.Password)
+
+	if err != nil {
+		return nil, err
+	}
+
+	token, err := models.PersonalAccessToken{}.CreateTokenForUser(*getUser, "Personal Access Token", u.Remember)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &token, nil
 }

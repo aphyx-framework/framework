@@ -1,7 +1,7 @@
 package models
 
 import (
-	"RyftFramework/database"
+	"RyftFramework/bootstrapper/database"
 	"RyftFramework/utils"
 	"errors"
 	"github.com/gofiber/fiber/v2"

@@ -1,6 +1,7 @@
 package migration
 
 import (
+	"RyftFramework/bootstrapper/logging"
 	"RyftFramework/configuration"
 	"RyftFramework/models"
 	"RyftFramework/utils"
@@ -15,7 +16,7 @@ var config configuration.Configuration
 var DB *gorm.DB
 
 func RunMigrator(fresh bool, seed bool) {
-	utils.LoadLogger()
+	logging.LoadLogger()
 	utils.InfoLogger.Println("Migration Started")
 	bootstrap()
 

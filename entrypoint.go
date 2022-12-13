@@ -1,15 +1,16 @@
 package main
 
 import (
+	"RyftFramework/bootstrapper/logging"
 	"RyftFramework/configuration"
-	"RyftFramework/database"
+	container "RyftFramework/di"
 	"RyftFramework/migration"
 	"RyftFramework/routing"
-	"RyftFramework/utils"
 	"flag"
 	"fmt"
 	"github.com/TwiN/go-color"
 	"github.com/gofiber/fiber/v2"
+	"github.com/sarulabs/di"
 	"log"
 	"os"
 )
@@ -42,25 +43,21 @@ func main() {
 // This bootstrapper is responsible for initializing the framework
 // and setting up the required dependencies.
 func BootstrapFramework() {
-	app := fiber.New(fiber.Config{
-		DisableStartupMessage: true,
-		AppName:               configuration.ApplicationConfig.Application.Name,
-	})
+	container.BuildAppFull()
+	defer func(appDi di.Container) {
+		err := appDi.Delete()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(container.Dependency)
+
+	app := container.Dependency.Get("fiberServer").(*fiber.App)
+
 	printAsciiArt()
-	configuration.LoadConfigFile()
 	routing.LoadRouter(app)
-	utils.LoadLogger()
 	checkSecurityConfig()
 	checkAuthenticationConfig()
-	database.ConnectDatabase()
 	printEnabledFeature()
-
-	utils.InfoLogger.Print("Application started on port " + configuration.ApplicationConfig.Application.Port)
-	err := app.Listen(":" + configuration.ApplicationConfig.Application.Port)
-
-	if err != nil {
-		log.Fatalln(err)
-	}
 
 }
 
@@ -70,20 +67,22 @@ func BootstrapFramework() {
 // If feature is enabled, it will show a green check mark
 // If feature is disabled, it will show a red cross mark
 func printEnabledFeature() {
+	config := container.Dependency.Get("config").(configuration.Configuration)
+
 	println("Enabled features: ")
-	if configuration.ApplicationConfig.Database.Enabled {
+	if config.Database.Enabled {
 		println(color.GreenBackground + color.Black + " [✓] Database " + color.Reset)
 	} else {
 		println(color.RedBackground + color.Black + " [X] Database " + color.Reset)
 	}
 
-	if configuration.ApplicationConfig.Authentication.Enabled {
+	if config.Authentication.Enabled {
 		println(color.GreenBackground + color.Black + " [✓] Authentication " + color.Reset)
 	} else {
 		println(color.RedBackground + color.Black + " [X] Authentication " + color.Reset)
 	}
 
-	if configuration.ApplicationConfig.Caching.Enabled {
+	if config.Caching.Enabled {
 		println(color.GreenBackground + color.Black + " [✓] Caching " + color.Reset)
 	} else {
 		println(color.RedBackground + color.Black + " [X] Caching " + color.Reset)
@@ -96,12 +95,15 @@ func printEnabledFeature() {
 // It is a basic check to make sure that the secret key is set
 // And you didn't enable debug mode in production
 func checkSecurityConfig() {
-	if configuration.ApplicationConfig.Security.Key == "" {
-		utils.ErrorLogger.Fatalln("Security key is not set")
+	config := container.Dependency.Get("config").(configuration.Configuration)
+	logger := container.Dependency.Get("logger").(logging.ApplicationLogger)
+
+	if config.Security.Key == "" {
+		logger.ErrorLogger.Fatalln("Security key is not set")
 	}
 
-	if configuration.ApplicationConfig.Security.DebugMode == true && configuration.ApplicationConfig.Security.Production == true {
-		utils.WarningLogger.Print("Debug mode is enabled in production mode")
+	if config.Security.DebugMode == true && config.Security.Production == true {
+		logger.WarningLogger.Print("Debug mode is enabled in production mode")
 	}
 }
 
@@ -111,12 +113,15 @@ func checkSecurityConfig() {
 // For authentication to work, a valid URL and key must be set
 // And migration must be enabled
 func checkAuthenticationConfig() {
-	if configuration.ApplicationConfig.Authentication.Enabled == true && configuration.ApplicationConfig.Authentication.AuthenticationUrl == "" {
-		utils.ErrorLogger.Fatalln("Authentication URL is not set")
+	config := container.Dependency.Get("config").(configuration.Configuration)
+	logger := container.Dependency.Get("logger").(logging.ApplicationLogger)
+
+	if config.Authentication.Enabled == true && config.Authentication.AuthenticationUrl == "" {
+		logger.ErrorLogger.Fatalln("Authentication URL is not set")
 	}
 
-	if configuration.ApplicationConfig.Authentication.Enabled == true && configuration.ApplicationConfig.Database.Enabled == false {
-		utils.ErrorLogger.Fatalln("Database must be enabled to use authentication")
+	if config.Authentication.Enabled == true && config.Database.Enabled == false {
+		logger.ErrorLogger.Fatalln("Database must be enabled to use authentication")
 	}
 }
 

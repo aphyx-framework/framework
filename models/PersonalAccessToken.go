@@ -1,7 +1,7 @@
 package models
 
 import (
-	"RyftFramework/database"
+	"RyftFramework/bootstrapper/database"
 	"RyftFramework/utils"
 	"gorm.io/gorm"
 	"time"

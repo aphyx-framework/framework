@@ -1,7 +1,9 @@
 package routing
 
 import (
+	"RyftFramework/bootstrapper/logging"
 	"RyftFramework/configuration"
+	"RyftFramework/di"
 	"RyftFramework/middlewares"
 	"RyftFramework/utils"
 	"github.com/gofiber/fiber/v2"
@@ -33,11 +35,14 @@ func loadApiRoutes(app *fiber.App) {
 // If auth is enabled, then the auth routing will be loaded
 // If not, then it will return a 404
 func loadAuthRoute(app *fiber.App) {
-	auth := app.Group(configuration.ApplicationConfig.Authentication.AuthenticationUrl)
+	config := di.Dependency.Get("config").(configuration.Configuration)
+	logger := di.Dependency.Get("logger").(logging.ApplicationLogger)
+
+	auth := app.Group(config.Authentication.AuthenticationUrl)
 	auth.Use(func(c *fiber.Ctx) error {
-		if configuration.ApplicationConfig.Authentication.Enabled == false {
-			if configuration.ApplicationConfig.Security.DebugMode == true {
-				utils.ErrorLogger.Print("Trying to access authentication route while authentication is disabled")
+		if config.Authentication.Enabled == false {
+			if config.Security.DebugMode == true {
+				logger.ErrorLogger.Print("Trying to access authentication route while authentication is disabled")
 				return c.Status(http.StatusInternalServerError).JSON(utils.HttpResponse{
 					Success: false,
 					Message: "Authentication is not enabled. Check your config.toml file!",
@@ -53,18 +58,18 @@ func loadAuthRoute(app *fiber.App) {
 		return c.Next()
 	})
 
-	if configuration.ApplicationConfig.Authentication.Enabled == false {
+	if config.Authentication.Enabled == false {
 		// Catch all route when authentication is disabled
 		auth.All("*", func(c *fiber.Ctx) error {
 			return c.SendString("")
 		})
 	}
 
-	loginAuth := app.Group(configuration.ApplicationConfig.Authentication.AuthenticationUrl + "/user")
+	loginAuth := app.Group(config.Authentication.AuthenticationUrl + "/user")
 	loginAuth.Use(func(c *fiber.Ctx) error {
-		if configuration.ApplicationConfig.Authentication.Enabled == false {
-			if configuration.ApplicationConfig.Security.DebugMode == true {
-				utils.ErrorLogger.Print("Trying to access authentication route while authentication is disabled")
+		if config.Authentication.Enabled == false {
+			if config.Security.DebugMode == true {
+				logger.ErrorLogger.Print("Trying to access authentication route while authentication is disabled")
 				return c.Status(http.StatusInternalServerError).JSON(utils.HttpResponse{
 					Success: false,
 					Message: "Authentication is not enabled. Check your config.toml file!",
@@ -80,7 +85,7 @@ func loadAuthRoute(app *fiber.App) {
 		return c.Next()
 	})
 
-	if configuration.ApplicationConfig.Authentication.Enabled == false {
+	if config.Authentication.Enabled == false {
 		// Catch all route when authentication is disabled
 		loginAuth.All("*", func(c *fiber.Ctx) error {
 			return c.SendString("")

@@ -1,7 +1,7 @@
 package AuthController
 
 import (
-	"RyftFramework/database"
+	"RyftFramework/bootstrapper/database"
 	"RyftFramework/models"
 	"RyftFramework/utils"
 	"encoding/json"

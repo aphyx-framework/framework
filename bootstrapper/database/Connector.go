@@ -2,6 +2,7 @@ package database
 
 import (
 	"RyftFramework/configuration"
+	"RyftFramework/di"
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -14,18 +15,20 @@ var DB *gorm.DB
 // This function is used to connect to the migration. Ryft uses MySQL as the default migration.
 // Database is handled by GORM.
 // Find the docs here: https://gorm.io
-func ConnectDatabase() {
+func ConnectDatabase() (*gorm.DB, error) {
+	config := di.Dependency.Get("config").(configuration.Configuration)
 
-	if configuration.ApplicationConfig.Database.Enabled {
+	if config.Database.Enabled {
 		dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-			configuration.ApplicationConfig.Database.Username,
-			configuration.ApplicationConfig.Database.Password,
-			configuration.ApplicationConfig.Database.Host,
-			configuration.ApplicationConfig.Database.Port,
-			configuration.ApplicationConfig.Database.Name,
+			config.Database.Username,
+			config.Database.Password,
+			config.Database.Host,
+			config.Database.Port,
+			config.Database.Name,
 		)
-		database, _ := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+		database, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
-		DB = database
+		return database, err
 	}
+	return nil, nil
 }

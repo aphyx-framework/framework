@@ -1,0 +1,19 @@
+package __CONTROLLER_PKG_NAME__
+
+import (
+	"github.com/gofiber/fiber/v2"
+	"__APP_BASE_PKG__/app"
+	"__APP_BASE_PKG__/app/utils"
+)
+
+// __HANDLER_PKG_NAME__
+// This is an example of a handler
+// Modify it to suit your needs
+func __HANDLER_PKG_NAME__(c *fiber.Ctx) error {
+
+	return c.Status(fiber.StatusOK).JSON(utils.HttpResponse{
+		Success: true,
+		Message: "Hello World from " + app.Config.Application.Name,
+		Data:    nil,
+	})
+}

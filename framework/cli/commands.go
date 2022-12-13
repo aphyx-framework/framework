@@ -2,6 +2,7 @@ package cli
 
 import (
 	"flag"
+	"github.com/rama-adi/RyFT-Framework/framework/cli/generator"
 	"github.com/rama-adi/RyFT-Framework/framework/cli/migration"
 	"github.com/rama-adi/RyFT-Framework/framework/configuration"
 	"github.com/rama-adi/RyFT-Framework/framework/database"
@@ -33,6 +34,8 @@ func runCliCommand(logger logging.ApplicationLogger, config configuration.Config
 			panic(err)
 		}
 		migration.RunMigrator(*fresh, *seed, logger, db)
+	case "make":
+		generator.Generator(os.Args[2], logger)
 	default:
 		panic("Unknown command")
 	}

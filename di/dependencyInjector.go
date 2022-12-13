@@ -3,8 +3,8 @@ package di
 import (
 	"RyftFramework/bootstrapper/database"
 	"RyftFramework/bootstrapper/logging"
+	"RyftFramework/bootstrapper/router"
 	"RyftFramework/configuration"
-	"RyftFramework/routing"
 	"github.com/BurntSushi/toml"
 	"github.com/gofiber/fiber/v2"
 	"github.com/sarulabs/di"
@@ -16,6 +16,7 @@ var (
 	Database    = "database"
 	Logger      = "logger"
 	FiberServer = "fiberServer"
+	Router      = "router"
 )
 
 func BuildAppFull() {
@@ -61,13 +62,13 @@ func BuildAppFull() {
 			},
 		},
 		{
-			Name: "router",
+			Name: Router,
 			Build: func(ctn di.Container) (interface{}, error) {
 				app := ctn.Get(FiberServer).(*fiber.App)
 				logger := ctn.Get(Logger).(logging.ApplicationLogger)
 				config := ctn.Get(Config).(configuration.Configuration)
-				routing.LoadAuthRoute(app, logger, config)
-				routing.LoadApiRoutes(app)
+				router.LoadAuthRoute(app, logger, config)
+				router.LoadApiRoutes(app)
 				return app, nil
 			},
 		},

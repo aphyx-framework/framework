@@ -1,9 +1,10 @@
-package routing
+package router
 
 import (
 	"RyftFramework/bootstrapper/logging"
 	"RyftFramework/configuration"
 	"RyftFramework/middlewares"
+	"RyftFramework/routing"
 	"RyftFramework/utils"
 	"github.com/gofiber/fiber/v2"
 	"net/http"
@@ -15,7 +16,7 @@ import (
 // Ryft is primarily an API framework so all the routing are loaded here
 func LoadApiRoutes(app *fiber.App) {
 	apiRoutes := app.Group("/api")
-	ApiRoutes(apiRoutes)
+	routing.ApiRoutes(apiRoutes)
 }
 
 // LoadAuthRoute --
@@ -80,6 +81,6 @@ func LoadAuthRoute(app *fiber.App, logger logging.ApplicationLogger, config conf
 
 	loginAuth.Use(middlewares.WithAuthenticationData)
 
-	AuthThatNeedsLogin(loginAuth)
-	AuthRoutes(auth)
+	routing.AuthThatNeedsLogin(loginAuth)
+	routing.AuthRoutes(auth)
 }

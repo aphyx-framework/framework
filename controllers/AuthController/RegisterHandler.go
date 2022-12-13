@@ -33,10 +33,12 @@ func RegisterHandler(c *fiber.Ctx) error {
 		})
 	}
 
+	password, err := utils.HashPassword(user.Password)
+
 	newUser := models.User{
 		Name:     user.Name,
 		Email:    user.Email,
-		Password: utils.HashPassword(user.Password),
+		Password: password,
 	}
 
 	register, err := newUser.Register()

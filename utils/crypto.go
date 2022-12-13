@@ -1,9 +1,6 @@
 package utils
 
 import (
-	"RyftFramework/bootstrapper/logging"
-	"RyftFramework/configuration"
-	"RyftFramework/di"
 	"crypto/aes"
 	"encoding/hex"
 	"golang.org/x/crypto/bcrypt"
@@ -12,13 +9,16 @@ import (
 // HashPassword ---
 //
 // This function is used to hash the password using bcrypt
-func HashPassword(password string) string {
-	logger := di.Dependency.Get(di.Logger).(logging.ApplicationLogger)
+func HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+
 	if err != nil {
-		logger.ErrorLogger.Fatalln(err)
+		return "", err
 	}
-	return string(bytes)
+
+	hashedPassword := string(bytes)
+
+	return hashedPassword, nil
 }
 
 // CheckPasswordHash ---
@@ -29,19 +29,16 @@ func CheckPasswordHash(password, hash string) bool {
 	return err == nil
 }
 
-func EncryptString(plainText string) (string, error) {
-	config := di.Dependency.Get(di.Config).(configuration.Configuration)
-	logger := di.Dependency.Get(di.Logger).(logging.ApplicationLogger)
-
-	c, err := aes.NewCipher([]byte(config.Security.Key))
+func EncryptString(plainText string, key string) (string, error) {
+	c, err := aes.NewCipher([]byte(key))
 
 	if err != nil {
-		logger.ErrorLogger.Print(err)
 		return "", err
 	}
 
 	msgByte := make([]byte, len(plainText))
 	c.Encrypt(msgByte, []byte(plainText))
+
 	return hex.EncodeToString(msgByte), nil
 
 }

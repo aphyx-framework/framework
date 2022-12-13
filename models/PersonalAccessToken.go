@@ -2,6 +2,8 @@ package models
 
 import (
 	"RyftFramework/bootstrapper/database"
+	"RyftFramework/configuration"
+	"RyftFramework/di"
 	"RyftFramework/utils"
 	"gorm.io/gorm"
 	"time"
@@ -29,8 +31,8 @@ func (pat PersonalAccessToken) Logout() error {
 }
 
 func (_ PersonalAccessToken) RevokeToken(token string) error {
-
-	tokenEnc, err := utils.EncryptString(token)
+	config := di.Dependency.Get(di.Config).(*configuration.Configuration)
+	tokenEnc, err := utils.EncryptString(token, config.Security.Key)
 
 	if err != nil {
 		return err
@@ -52,7 +54,8 @@ func (_ PersonalAccessToken) CreateTokenForUser(user User, name string, permanen
 		expiry = time.Now().AddDate(0, 1, 0)
 	}
 
-	tokenEnc, err := utils.EncryptString(plaintextToken)
+	config := di.Dependency.Get(di.Config).(*configuration.Configuration)
+	tokenEnc, err := utils.EncryptString(plaintextToken, config.Security.Key)
 
 	if err != nil {
 		return PersonalAccessTokenResponse{}, err

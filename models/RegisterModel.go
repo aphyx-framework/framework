@@ -14,11 +14,18 @@ func RegisteredModels() []Model {
 			Seeder: &utils.SeederDefinition{
 				Amount: 10,
 				Run: func(db *gorm.DB) error {
+					password, err := utils.HashPassword("password")
+
+					if err != nil {
+						return err
+					}
+
 					user := User{
 						Name:     gofakeit.Name(),
 						Email:    gofakeit.Email(),
-						Password: utils.HashPassword("password"),
+						Password: password,
 					}
+
 					return db.Create(&user).Error
 				},
 			},

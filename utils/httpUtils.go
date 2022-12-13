@@ -1,8 +1,6 @@
 package utils
 
 import (
-	"RyftFramework/bootstrapper/logging"
-	"RyftFramework/di"
 	"net/url"
 )
 
@@ -23,13 +21,10 @@ type ErrorResponse struct {
 	Value       string `json:"value"`
 }
 
-func DecodeUrlParam(param string) string {
-	logger := di.Dependency.Get(di.Logger).(logging.ApplicationLogger)
+func DecodeUrlParam(param string) (string, error) {
 	decoded, err := url.QueryUnescape(param)
-
 	if err != nil {
-		logger.ErrorLogger.Fatalln(err)
+		return "", err
 	}
-
-	return decoded
+	return decoded, nil
 }

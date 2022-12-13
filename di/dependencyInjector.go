@@ -4,6 +4,7 @@ import (
 	"RyftFramework/bootstrapper/database"
 	"RyftFramework/bootstrapper/logging"
 	"RyftFramework/configuration"
+	"RyftFramework/routing"
 	"github.com/BurntSushi/toml"
 	"github.com/gofiber/fiber/v2"
 	"github.com/sarulabs/di"
@@ -51,11 +52,23 @@ func BuildAppFull() {
 				app := fiber.New(fiber.Config{
 					DisableStartupMessage: true,
 					AppName:               config.Application.Name,
+					EnablePrintRoutes:     true,
 				})
 
 				logger.InfoLogger.Print("Application started on port " + config.Application.Port)
 				err := app.Listen(":" + config.Application.Port)
 				return app, err
+			},
+		},
+		{
+			Name: "router",
+			Build: func(ctn di.Container) (interface{}, error) {
+				app := ctn.Get(FiberServer).(*fiber.App)
+				logger := ctn.Get(Logger).(logging.ApplicationLogger)
+				config := ctn.Get(Config).(configuration.Configuration)
+				routing.LoadAuthRoute(app, logger, config)
+				routing.LoadApiRoutes(app)
+				return app, nil
 			},
 		},
 	}...)

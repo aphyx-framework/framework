@@ -5,11 +5,9 @@ import (
 	"RyftFramework/configuration"
 	container "RyftFramework/di"
 	"RyftFramework/migration"
-	"RyftFramework/routing"
 	"flag"
 	"fmt"
 	"github.com/TwiN/go-color"
-	"github.com/gofiber/fiber/v2"
 	"github.com/sarulabs/di"
 	"log"
 	"os"
@@ -55,9 +53,6 @@ func BootstrapFramework() {
 			log.Fatal(err)
 		}
 	}(container.Dependency)
-
-	app := container.Dependency.Get(container.FiberServer).(*fiber.App)
-	routing.LoadRouter(app)
 
 }
 

@@ -3,41 +3,27 @@ package routing
 import (
 	"RyftFramework/bootstrapper/logging"
 	"RyftFramework/configuration"
-	"RyftFramework/di"
 	"RyftFramework/middlewares"
 	"RyftFramework/utils"
 	"github.com/gofiber/fiber/v2"
 	"net/http"
 )
 
-// LoadRouter ---
-//
-// This function is responsible for loading all the routing.
-// It will load the API routing and the Authentication routing
-// It also supports middleware
-func LoadRouter(app *fiber.App) {
-	loadAuthRoute(app)
-	loadApiRoutes(app)
-}
-
-// loadApiRoutes --
+// LoadApiRoutes --
 //
 // This function is responsible for loading all the API routing.
 // Ryft is primarily an API framework so all the routing are loaded here
-func loadApiRoutes(app *fiber.App) {
+func LoadApiRoutes(app *fiber.App) {
 	apiRoutes := app.Group("/api")
 	ApiRoutes(apiRoutes)
 }
 
-// loadAuthRoute --
+// LoadAuthRoute --
 //
 // This function is responsible for loading all the Authentication routing.
 // If auth is enabled, then the auth routing will be loaded
 // If not, then it will return a 404
-func loadAuthRoute(app *fiber.App) {
-	config := di.Dependency.Get(di.Config).(configuration.Configuration)
-	logger := di.Dependency.Get(di.Logger).(logging.ApplicationLogger)
-
+func LoadAuthRoute(app *fiber.App, logger logging.ApplicationLogger, config configuration.Configuration) {
 	auth := app.Group(config.Authentication.AuthenticationUrl)
 	auth.Use(func(c *fiber.Ctx) error {
 		if config.Authentication.Enabled == false {

@@ -23,7 +23,7 @@ enabled = true
 # Database host
 host = "127.0.0.1"
 # Database port
-port = 3306
+port = "3306"
 # Database Username
 username = "root"
 # Database password

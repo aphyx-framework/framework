@@ -4,8 +4,9 @@ Ryft Framework is a lightweight and efficient web development framework written 
 like GORM for ORM, FX for Dependency Injection, and Fiber for HTTP handling. Our goal is to provide a well-rounded and
 easy for beginner framework that allows developers to quickly and easily create web apps in go easily.
 
-**Disclaimer**: Still in alpha testing. We're frequently pushing updates and overhaul so your current version might be
-outdated.
+> **Warning**
+> This framework is still in alpha testing. We're frequently pushing updates and overhaul so your current version might
+> be outdated. Please check back often for updates.
 
 ## Language
 

@@ -7,8 +7,6 @@ import (
 	"gorm.io/gorm"
 )
 
-var DB *gorm.DB
-
 func NewDbConnection(config configuration.Configuration) (*gorm.DB, error) {
 	if config.Database.Enabled {
 		dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",

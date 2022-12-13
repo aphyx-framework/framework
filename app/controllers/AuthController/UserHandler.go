@@ -1,8 +1,8 @@
 package AuthController
 
 import (
-	"RyftFramework/models"
-	"RyftFramework/utils"
+	"RyftFramework/app/models"
+	"RyftFramework/app/utils"
 	"github.com/gofiber/fiber/v2"
 )
 

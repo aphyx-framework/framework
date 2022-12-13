@@ -1,7 +1,7 @@
 package models
 
 import (
-	"RyftFramework/utils"
+	utils2 "RyftFramework/app/utils"
 	"github.com/brianvoe/gofakeit/v6"
 	"gorm.io/gorm"
 )
@@ -11,10 +11,10 @@ func RegisteredModels() []Model {
 		{
 			Name:  "User",
 			Model: User{},
-			Seeder: &utils.SeederDefinition{
+			Seeder: &utils2.SeederDefinition{
 				Amount: 10,
 				Run: func(db *gorm.DB) error {
-					password, err := utils.HashPassword("password")
+					password, err := utils2.HashPassword("password")
 
 					if err != nil {
 						return err
@@ -41,5 +41,5 @@ func RegisteredModels() []Model {
 type Model struct {
 	Name   string
 	Model  interface{}
-	Seeder *utils.SeederDefinition
+	Seeder *utils2.SeederDefinition
 }

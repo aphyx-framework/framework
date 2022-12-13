@@ -1,9 +1,9 @@
 package AuthController
 
 import (
-	"RyftFramework/bootstrapper/database"
-	"RyftFramework/models"
-	"RyftFramework/utils"
+	"RyftFramework/app/models"
+	utils2 "RyftFramework/app/utils"
+	"RyftFramework/framework/bootstrapper/database"
 	"encoding/json"
 	"errors"
 	validation "github.com/go-ozzo/ozzo-validation"
@@ -26,14 +26,14 @@ func RegisterHandler(c *fiber.Ctx) error {
 	err := user.performValidation()
 
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(utils.HttpResponse{
+		return c.Status(fiber.StatusBadRequest).JSON(utils2.HttpResponse{
 			Success: false,
 			Message: err.Error(),
 			Data:    err,
 		})
 	}
 
-	password, err := utils.HashPassword(user.Password)
+	password, err := utils2.HashPassword(user.Password)
 
 	newUser := models.User{
 		Name:     user.Name,
@@ -44,14 +44,14 @@ func RegisterHandler(c *fiber.Ctx) error {
 	register, err := newUser.Register()
 
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(utils.HttpResponse{
+		return c.Status(fiber.StatusBadRequest).JSON(utils2.HttpResponse{
 			Success: false,
 			Message: err.Error(),
 			Data:    nil,
 		})
 	}
 
-	return c.Status(fiber.StatusOK).JSON(utils.HttpResponse{
+	return c.Status(fiber.StatusOK).JSON(utils2.HttpResponse{
 		Success: true,
 		Message: "User registered successfully",
 		Data:    register,

@@ -1,15 +1,15 @@
 package AuthController
 
 import (
-	"RyftFramework/models"
-	"RyftFramework/utils"
+	models2 "RyftFramework/app/models"
+	"RyftFramework/app/utils"
 	"github.com/gofiber/fiber/v2"
 )
 
 func LogoutHandler(c *fiber.Ctx) error {
 
-	token := models.User{}.LoggedInAccessToken(c)
-	err := models.PersonalAccessToken{}.RevokeToken(token)
+	token := models2.User{}.LoggedInAccessToken(c)
+	err := models2.PersonalAccessToken{}.RevokeToken(token)
 
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(utils.HttpResponse{

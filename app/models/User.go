@@ -1,8 +1,10 @@
 package models
 
 import (
-	"RyftFramework/bootstrapper/database"
-	"RyftFramework/utils"
+	"RyftFramework/app"
+	"RyftFramework/app/utils"
+	"RyftFramework/framework/bootstrapper/database"
+	"RyftFramework/framework/configuration"
 	"errors"
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
@@ -58,9 +60,10 @@ func (u User) Register() (*UserWithToken, error) {
 }
 
 func (_ User) FromAccessToken(token string) (*User, error) {
+	var config = app.Container.Get("config").(configuration.Configuration)
 	var personalAccessToken PersonalAccessToken
 
-	enc, err := utils.EncryptString(token)
+	enc, err := utils.EncryptString(token, config.Security.Key)
 
 	if err != nil {
 		return nil, err

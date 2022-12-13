@@ -1,7 +1,7 @@
 package database
 
 import (
-	"RyftFramework/configuration"
+	"RyftFramework/framework/configuration"
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"

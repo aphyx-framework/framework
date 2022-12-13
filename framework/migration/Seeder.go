@@ -1,14 +1,14 @@
 package migration
 
 import (
-	"RyftFramework/bootstrapper/logging"
-	"RyftFramework/di"
-	"RyftFramework/models"
-	"RyftFramework/utils"
+	"RyftFramework/app/models"
+	"RyftFramework/app/utils"
+	"RyftFramework/framework/bootstrapper/logging"
+	"RyftFramework/framework/di"
 )
 
 func runSeeder() {
-	logger := di.Dependency.Get(di.Logger).(logging.ApplicationLogger)
+	logger := di.FrameworkDependency.Get(di.Logger).(logging.ApplicationLogger)
 	for _, model := range models.RegisteredModels() {
 		if model.Seeder != nil {
 			logger.InfoLogger.Println("Seeding table for model: ", model.Name)
@@ -19,7 +19,7 @@ func runSeeder() {
 }
 
 func doSeeding(seed utils.SeederDefinition) {
-	logger := di.Dependency.Get(di.Logger).(logging.ApplicationLogger)
+	logger := di.FrameworkDependency.Get(di.Logger).(logging.ApplicationLogger)
 	for i := 0; i < seed.Amount; i++ {
 		err := seed.Run(DB)
 		if err != nil {

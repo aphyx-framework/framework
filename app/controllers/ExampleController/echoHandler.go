@@ -1,7 +1,7 @@
 package ExampleController
 
 import (
-	"RyftFramework/utils"
+	"RyftFramework/app/utils"
 	"github.com/gofiber/fiber/v2"
 )
 

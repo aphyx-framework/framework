@@ -1,8 +1,8 @@
 package AuthController
 
 import (
-	"RyftFramework/models"
-	"RyftFramework/utils"
+	models2 "RyftFramework/app/models"
+	"RyftFramework/app/utils"
 	"encoding/json"
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/gofiber/fiber/v2"
@@ -55,14 +55,14 @@ func (u UserLogin) performValidation() error {
 	)
 }
 
-func (u UserLogin) performLogin() (*models.PersonalAccessTokenResponse, error) {
-	getUser, err := models.User{}.Login(u.Email, u.Password)
+func (u UserLogin) performLogin() (*models2.PersonalAccessTokenResponse, error) {
+	getUser, err := models2.User{}.Login(u.Email, u.Password)
 
 	if err != nil {
 		return nil, err
 	}
 
-	token, err := models.PersonalAccessToken{}.CreateTokenForUser(*getUser, "Personal Access Token", u.Remember)
+	token, err := models2.PersonalAccessToken{}.CreateTokenForUser(*getUser, "Personal Access Token", u.Remember)
 
 	if err != nil {
 		return nil, err

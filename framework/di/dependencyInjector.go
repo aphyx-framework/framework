@@ -1,22 +1,23 @@
 package di
 
 import (
-	"RyftFramework/bootstrapper/database"
-	"RyftFramework/bootstrapper/logging"
-	"RyftFramework/bootstrapper/router"
-	"RyftFramework/configuration"
+	"RyftFramework/app"
+	"RyftFramework/framework/bootstrapper/database"
+	"RyftFramework/framework/bootstrapper/logging"
+	"RyftFramework/framework/bootstrapper/router"
+	"RyftFramework/framework/configuration"
 	"github.com/BurntSushi/toml"
 	"github.com/gofiber/fiber/v2"
 	"github.com/sarulabs/di"
 )
 
 var (
-	Dependency  di.Container
-	Config      = "config"
-	Database    = "database"
-	Logger      = "logger"
-	FiberServer = "fiberServer"
-	Router      = "router"
+	FrameworkDependency di.Container
+	Config              = "config"
+	Database            = "database"
+	Logger              = "logger"
+	FiberServer         = "fiberServer"
+	Router              = "router"
 )
 
 func BuildAppFull() {
@@ -34,7 +35,7 @@ func BuildAppFull() {
 		{
 			Name: Database,
 			Build: func(ctn di.Container) (interface{}, error) {
-				config := Dependency.Get(Config).(configuration.Configuration)
+				config := FrameworkDependency.Get(Config).(configuration.Configuration)
 				return database.ConnectDatabase(config)
 			},
 		},
@@ -50,26 +51,26 @@ func BuildAppFull() {
 				config := ctn.Get(Config).(configuration.Configuration)
 				logger := ctn.Get(Logger).(logging.ApplicationLogger)
 
-				app := fiber.New(fiber.Config{
+				webServer := fiber.New(fiber.Config{
 					DisableStartupMessage: true,
 					AppName:               config.Application.Name,
 					EnablePrintRoutes:     true,
 				})
 
 				logger.InfoLogger.Print("Application started on port " + config.Application.Port)
-				err := app.Listen(":" + config.Application.Port)
-				return app, err
+				err := webServer.Listen(":" + config.Application.Port)
+				return webServer, err
 			},
 		},
 		{
 			Name: Router,
-			Build: func(ctn di.Container) (interface{}, error) {
-				app := ctn.Get(FiberServer).(*fiber.App)
+			Build: func(ctn di.Container) (any, error) {
+				webServer := ctn.Get(FiberServer).(*fiber.App)
 				logger := ctn.Get(Logger).(logging.ApplicationLogger)
 				config := ctn.Get(Config).(configuration.Configuration)
-				router.LoadAuthRoute(app, logger, config)
-				router.LoadApiRoutes(app)
-				return app, nil
+				router.LoadAuthRoute(webServer, logger, config)
+				router.LoadApiRoutes(webServer)
+				return nil, nil
 			},
 		},
 	}...)
@@ -78,7 +79,10 @@ func BuildAppFull() {
 		panic(err)
 	}
 
-	Dependency = builder.Build()
+	dependencyContainer := builder.Build()
+
+	FrameworkDependency = dependencyContainer
+	app.Container = dependencyContainer
 }
 
 func BuildForMigrator() {
@@ -96,7 +100,7 @@ func BuildForMigrator() {
 		{
 			Name: "database",
 			Build: func(ctn di.Container) (interface{}, error) {
-				config := Dependency.Get(Config).(configuration.Configuration)
+				config := FrameworkDependency.Get(Config).(configuration.Configuration)
 				return database.ConnectDatabase(config)
 			},
 		},
@@ -112,5 +116,5 @@ func BuildForMigrator() {
 		panic(err)
 	}
 
-	Dependency = builder.Build()
+	FrameworkDependency = builder.Build()
 }

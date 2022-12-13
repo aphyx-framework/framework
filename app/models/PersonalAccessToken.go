@@ -1,10 +1,10 @@
 package models
 
 import (
-	"RyftFramework/bootstrapper/database"
-	"RyftFramework/configuration"
-	"RyftFramework/di"
-	"RyftFramework/utils"
+	"RyftFramework/app"
+	utils2 "RyftFramework/app/utils"
+	"RyftFramework/framework/bootstrapper/database"
+	"RyftFramework/framework/configuration"
 	"gorm.io/gorm"
 	"time"
 )
@@ -31,8 +31,8 @@ func (pat PersonalAccessToken) Logout() error {
 }
 
 func (_ PersonalAccessToken) RevokeToken(token string) error {
-	config := di.Dependency.Get(di.Config).(*configuration.Configuration)
-	tokenEnc, err := utils.EncryptString(token, config.Security.Key)
+	config := app.Container.Get("config").(*configuration.Configuration)
+	tokenEnc, err := utils2.EncryptString(token, config.Security.Key)
 
 	if err != nil {
 		return err
@@ -42,7 +42,7 @@ func (_ PersonalAccessToken) RevokeToken(token string) error {
 }
 
 func (_ PersonalAccessToken) CreateTokenForUser(user User, name string, permanent bool) (PersonalAccessTokenResponse, error) {
-	plaintextToken := utils.RandStringRunes(40)
+	plaintextToken := utils2.RandStringRunes(40)
 
 	var expiry time.Time
 
@@ -54,8 +54,8 @@ func (_ PersonalAccessToken) CreateTokenForUser(user User, name string, permanen
 		expiry = time.Now().AddDate(0, 1, 0)
 	}
 
-	config := di.Dependency.Get(di.Config).(*configuration.Configuration)
-	tokenEnc, err := utils.EncryptString(plaintextToken, config.Security.Key)
+	config := app.Container.Get("config").(*configuration.Configuration)
+	tokenEnc, err := utils2.EncryptString(plaintextToken, config.Security.Key)
 
 	if err != nil {
 		return PersonalAccessTokenResponse{}, err

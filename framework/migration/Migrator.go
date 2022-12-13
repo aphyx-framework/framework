@@ -1,10 +1,10 @@
 package migration
 
 import (
-	"RyftFramework/bootstrapper/logging"
-	"RyftFramework/configuration"
-	"RyftFramework/di"
-	"RyftFramework/models"
+	"RyftFramework/app/models"
+	"RyftFramework/framework/bootstrapper/logging"
+	"RyftFramework/framework/configuration"
+	"RyftFramework/framework/di"
 	"fmt"
 	"github.com/BurntSushi/toml"
 	"gorm.io/driver/mysql"
@@ -16,7 +16,7 @@ var config configuration.Configuration
 var DB *gorm.DB
 
 func RunMigrator(fresh bool, seed bool) {
-	logger := di.Dependency.Get(di.Logger).(logging.ApplicationLogger)
+	logger := di.FrameworkDependency.Get(di.Logger).(logging.ApplicationLogger)
 	logger.InfoLogger.Println("Migration Started")
 	bootstrap()
 
@@ -39,7 +39,7 @@ func RunMigrator(fresh bool, seed bool) {
 // This function is responsible for dropping all the tables defined in RegisterModel
 // If you pass -fresh flag, this function will run
 func dropAllTables() {
-	logger := di.Dependency.Get(di.Logger).(logging.ApplicationLogger)
+	logger := di.FrameworkDependency.Get(di.Logger).(logging.ApplicationLogger)
 	for _, model := range models.RegisteredModels() {
 		logger.InfoLogger.Println("Dropping table for model: ", model.Name)
 		err := DB.Migrator().DropTable(model.Model)
@@ -54,7 +54,7 @@ func dropAllTables() {
 }
 
 func doMigrations() {
-	logger := di.Dependency.Get(di.Logger).(logging.ApplicationLogger)
+	logger := di.FrameworkDependency.Get(di.Logger).(logging.ApplicationLogger)
 	for _, model := range models.RegisteredModels() {
 		logger.InfoLogger.Println("Migrating the model: ", model.Name)
 		err := DB.Migrator().CreateTable(model.Model)

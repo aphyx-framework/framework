@@ -1,15 +1,13 @@
 package main
 
 import (
-	"RyftFramework/bootstrapper/logging"
-	"RyftFramework/configuration"
-	container "RyftFramework/di"
-	"RyftFramework/migration"
+	"RyftFramework/framework/bootstrapper/logging"
+	"RyftFramework/framework/configuration"
+	container "RyftFramework/framework/di"
+	"RyftFramework/framework/migration"
 	"flag"
 	"fmt"
 	"github.com/TwiN/go-color"
-	"github.com/sarulabs/di"
-	"log"
 	"os"
 )
 
@@ -21,18 +19,18 @@ func main() {
 	if len(os.Args) < 2 {
 		// If no argument is passed, start the server
 		BootstrapFramework()
-	}
-
-	switch os.Args[1] {
-	case "migrate":
-		err := migratorFlag.Parse(os.Args[2:])
-		if err != nil {
-			panic(err)
+	} else {
+		switch os.Args[1] {
+		case "migrate":
+			err := migratorFlag.Parse(os.Args[2:])
+			if err != nil {
+				panic(err)
+			}
+			container.BuildForMigrator()
+			migration.RunMigrator(*fresh, *seed)
+		default:
+			panic("Unknown command")
 		}
-		container.BuildForMigrator()
-		migration.RunMigrator(*fresh, *seed)
-	default:
-		panic("Unknown command")
 	}
 
 }
@@ -47,13 +45,6 @@ func BootstrapFramework() {
 	checkSecurityConfig()
 	checkAuthenticationConfig()
 	printEnabledFeature()
-	defer func(appDi di.Container) {
-		err := appDi.Delete()
-		if err != nil {
-			log.Fatal(err)
-		}
-	}(container.Dependency)
-
 }
 
 // printEnabledFeature --
@@ -62,7 +53,7 @@ func BootstrapFramework() {
 // If feature is enabled, it will show a green check mark
 // If feature is disabled, it will show a red cross mark
 func printEnabledFeature() {
-	config := container.Dependency.Get(container.Config).(configuration.Configuration)
+	config := container.FrameworkDependency.Get(container.Config).(configuration.Configuration)
 
 	println("Enabled features: ")
 	if config.Database.Enabled {
@@ -90,8 +81,8 @@ func printEnabledFeature() {
 // It is a basic check to make sure that the secret key is set
 // And you didn't enable debug mode in production
 func checkSecurityConfig() {
-	config := container.Dependency.Get(container.Config).(configuration.Configuration)
-	logger := container.Dependency.Get(container.Logger).(logging.ApplicationLogger)
+	config := container.FrameworkDependency.Get(container.Config).(configuration.Configuration)
+	logger := container.FrameworkDependency.Get(container.Logger).(logging.ApplicationLogger)
 
 	if config.Security.Key == "" {
 		logger.ErrorLogger.Fatalln("Security key is not set")
@@ -108,8 +99,8 @@ func checkSecurityConfig() {
 // For authentication to work, a valid URL and key must be set
 // And migration must be enabled
 func checkAuthenticationConfig() {
-	config := container.Dependency.Get(container.Config).(configuration.Configuration)
-	logger := container.Dependency.Get(container.Logger).(logging.ApplicationLogger)
+	config := container.FrameworkDependency.Get(container.Config).(configuration.Configuration)
+	logger := container.FrameworkDependency.Get(container.Logger).(logging.ApplicationLogger)
 
 	if config.Authentication.Enabled == true && config.Authentication.AuthenticationUrl == "" {
 		logger.ErrorLogger.Fatalln("Authentication URL is not set")

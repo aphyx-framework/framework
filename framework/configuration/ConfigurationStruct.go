@@ -1,5 +1,10 @@
 package configuration
 
+import (
+	"github.com/BurntSushi/toml"
+	"go.uber.org/fx"
+)
+
 // Configuration ---
 //
 // This struct is used to store the configuration for the framework
@@ -32,4 +37,10 @@ type Configuration struct {
 	Caching struct {
 		Enabled bool `toml:"enabled"`
 	} `toml:"caching"`
+}
+
+func NewConfiguration(fx.Lifecycle) (Configuration, error) {
+	config := &Configuration{}
+	_, err := toml.DecodeFile("config.toml", config)
+	return *config, err
 }

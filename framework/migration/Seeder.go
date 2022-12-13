@@ -3,8 +3,7 @@ package migration
 import (
 	"RyftFramework/app/models"
 	"RyftFramework/app/utils"
-	"RyftFramework/framework/bootstrapper/logging"
-	"RyftFramework/framework/di"
+	"RyftFramework/framework/logging"
 )
 
 func runSeeder() {

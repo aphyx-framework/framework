@@ -3,8 +3,6 @@ package models
 import (
 	"RyftFramework/app"
 	"RyftFramework/app/utils"
-	"RyftFramework/framework/bootstrapper/database"
-	"RyftFramework/framework/configuration"
 	"errors"
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
@@ -29,7 +27,7 @@ type UserWithToken struct {
 func (_ User) Login(email string, password string) (*User, error) {
 	var user User
 
-	database.DB.Where("email = ?", email).First(&user)
+	app.DB.Where("email = ?", email).First(&user)
 
 	if utils.CheckPasswordHash(password, user.Password) {
 		return &user, nil
@@ -40,7 +38,7 @@ func (_ User) Login(email string, password string) (*User, error) {
 
 func (u User) Register() (*UserWithToken, error) {
 
-	if err := database.DB.Create(&u).Error; err != nil {
+	if err := app.DB.Create(&u).Error; err != nil {
 		return nil, err
 	}
 
@@ -60,16 +58,16 @@ func (u User) Register() (*UserWithToken, error) {
 }
 
 func (_ User) FromAccessToken(token string) (*User, error) {
-	var config = app.Container.Get("config").(configuration.Configuration)
+
 	var personalAccessToken PersonalAccessToken
 
-	enc, err := utils.EncryptString(token, config.Security.Key)
+	enc, err := utils.EncryptString(token, app.Config.Security.Key)
 
 	if err != nil {
 		return nil, err
 	}
 
-	err = database.DB.Where("token = ?", enc).Preload("User").First(&personalAccessToken).Error
+	err = app.DB.Where("token = ?", enc).Preload("User").First(&personalAccessToken).Error
 
 	if err != nil {
 		return nil, err

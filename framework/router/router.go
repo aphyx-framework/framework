@@ -4,11 +4,18 @@ import (
 	"RyftFramework/app/middlewares"
 	routing2 "RyftFramework/app/routing"
 	"RyftFramework/app/utils"
-	"RyftFramework/framework/bootstrapper/logging"
 	"RyftFramework/framework/configuration"
+	"RyftFramework/framework/logging"
 	"github.com/gofiber/fiber/v2"
 	"net/http"
 )
+
+func RegisterAllRoutes(logger logging.ApplicationLogger, app *fiber.App, config configuration.Configuration) any {
+	LoadApiRoutes(app)
+	LoadAuthRoute(app, logger, config)
+
+	return nil
+}
 
 // LoadApiRoutes --
 //

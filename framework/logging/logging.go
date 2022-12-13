@@ -30,3 +30,14 @@ func LoadLogger() (ApplicationLogger, error) {
 
 	return logger, nil
 }
+
+func NewLogger() (ApplicationLogger, error) {
+
+	logger := ApplicationLogger{
+		InfoLogger:    log.New(os.Stdout, color.Black+color.CyanBackground+" INFO:     "+color.Reset+" ", log.Ldate|log.Ltime),
+		WarningLogger: log.New(os.Stdout, color.Black+color.YellowBackground+" WARNING:  "+color.Reset+" ", log.Ldate|log.Ltime),
+		ErrorLogger:   log.New(os.Stderr, color.Black+color.RedBackground+" ERROR:    "+color.Reset+" ", log.Ldate|log.Ltime),
+	}
+
+	return logger, nil
+}

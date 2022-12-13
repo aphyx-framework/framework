@@ -2,9 +2,9 @@ package migration
 
 import (
 	"RyftFramework/app/models"
-	"RyftFramework/framework/bootstrapper/logging"
 	"RyftFramework/framework/configuration"
 	"RyftFramework/framework/di"
+	"RyftFramework/framework/logging"
 	"fmt"
 	"github.com/BurntSushi/toml"
 	"gorm.io/driver/mysql"

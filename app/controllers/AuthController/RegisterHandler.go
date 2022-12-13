@@ -1,9 +1,9 @@
 package AuthController
 
 import (
+	"RyftFramework/app"
 	"RyftFramework/app/models"
 	utils2 "RyftFramework/app/utils"
-	"RyftFramework/framework/bootstrapper/database"
 	"encoding/json"
 	"errors"
 	validation "github.com/go-ozzo/ozzo-validation"
@@ -69,7 +69,7 @@ func (u UserRegister) performValidation() error {
 			}
 
 			var user models.User
-			if err := database.DB.Where("email = ?", value.(string)).First(&user).Error; err == gorm.ErrRecordNotFound {
+			if err := app.DB.Where("email = ?", value.(string)).First(&user).Error; err == gorm.ErrRecordNotFound {
 				return nil
 			} else {
 				return errors.New("email already in use")

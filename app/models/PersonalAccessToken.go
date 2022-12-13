@@ -3,8 +3,8 @@ package models
 import (
 	"RyftFramework/app"
 	utils2 "RyftFramework/app/utils"
-	"RyftFramework/framework/bootstrapper/database"
 	"RyftFramework/framework/configuration"
+	"go.uber.org/fx"
 	"gorm.io/gorm"
 	"time"
 )
@@ -27,18 +27,21 @@ type PersonalAccessTokenResponse struct {
 }
 
 func (pat PersonalAccessToken) Logout() error {
-	return database.DB.Delete(&pat).Error
+	return app.DB.Delete(&pat).Error
 }
 
 func (_ PersonalAccessToken) RevokeToken(token string) error {
-	config := app.Container.Get("config").(*configuration.Configuration)
+
+	var config *configuration.Configuration
+	fx.Populate(&config)
+
 	tokenEnc, err := utils2.EncryptString(token, config.Security.Key)
 
 	if err != nil {
 		return err
 	}
 
-	return database.DB.Delete(&PersonalAccessToken{}, "token = ?", tokenEnc).Error
+	return app.DB.Delete(&PersonalAccessToken{}, "token = ?", tokenEnc).Error
 }
 
 func (_ PersonalAccessToken) CreateTokenForUser(user User, name string, permanent bool) (PersonalAccessTokenResponse, error) {
@@ -54,7 +57,9 @@ func (_ PersonalAccessToken) CreateTokenForUser(user User, name string, permanen
 		expiry = time.Now().AddDate(0, 1, 0)
 	}
 
-	config := app.Container.Get("config").(*configuration.Configuration)
+	var config *configuration.Configuration
+	fx.Populate(&config)
+
 	tokenEnc, err := utils2.EncryptString(plaintextToken, config.Security.Key)
 
 	if err != nil {
@@ -68,7 +73,7 @@ func (_ PersonalAccessToken) CreateTokenForUser(user User, name string, permanen
 		ExpiresAt: expiry,
 	}
 
-	err = database.DB.Create(&token).Error
+	err = app.DB.Create(&token).Error
 
 	return PersonalAccessTokenResponse{
 		ID:        token.ID,

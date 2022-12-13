@@ -19,6 +19,7 @@ func RunCliApplication() {
 		fx.Provide(logging.NewLogger),
 		fx.Provide(database.NewDbConnection),
 		fx.Invoke(runCliCommand),
+		fx.Invoke(func() { os.Exit(0) }),
 	).Run()
 }
 

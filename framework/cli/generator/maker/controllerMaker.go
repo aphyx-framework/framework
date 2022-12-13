@@ -33,9 +33,5 @@ func ControllerMaker(controllerName string, moduleName string, handlerName strin
 			Replacement: handlerName,
 		},
 	})
-
-	err := os.WriteFile("app/controllers/"+controllerName+"/"+handlerName+".go", []byte(handlerFile), 0644)
-	if err != nil {
-		logger.ErrorLogger.Fatalln("Failed to create handler", err)
-	}
+	writeToFile("app/controllers/"+controllerName, handlerName+".go", handlerFile, logger)
 }

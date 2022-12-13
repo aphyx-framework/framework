@@ -28,6 +28,25 @@ func checkOrMakeDirectory(directory string, logger logging.ApplicationLogger) {
 	}
 }
 
+func writeToFile(directory string, fileName string, content string, logger logging.ApplicationLogger) {
+	file, err := os.Create(directory + "/" + fileName)
+	if err != nil {
+		logger.ErrorLogger.Panicln("Failed to create file "+fileName, err)
+	}
+
+	defer func(file *os.File) {
+		fileMakerError := file.Close()
+		if fileMakerError != nil {
+			logger.ErrorLogger.Panicln("Failed to close file "+fileName, fileMakerError)
+		}
+	}(file)
+
+	_, err = file.WriteString(content)
+	if err != nil {
+		logger.ErrorLogger.Panicln("Failed to write to file "+fileName, err)
+	}
+}
+
 func replaceAllPlaceholders(stub string, placeholderReplacer []PlaceholderReplacer) string {
 	for _, placeholder := range placeholderReplacer {
 		stub = strings.ReplaceAll(stub, placeholder.Placeholder, placeholder.Replacement)

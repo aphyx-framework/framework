@@ -40,5 +40,4 @@ func runCliCommand(logger logging.ApplicationLogger, config configuration.Config
 	default:
 		panic("Unknown command")
 	}
-
 }

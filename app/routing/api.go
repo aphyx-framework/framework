@@ -1,8 +1,8 @@
 package routing
 
 import (
-	ExampleController2 "RyftFramework/app/controllers/ExampleController"
 	"github.com/gofiber/fiber/v2"
+	ExampleController2 "github.com/rama-adi/RyFT-Framework/app/controllers/ExampleController"
 )
 
 // ApiRoutes ---

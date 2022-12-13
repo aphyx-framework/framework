@@ -4,6 +4,8 @@
 name = "MyApp"
 # Set the port to listen on
 port = "8080"
+# Tell fiber to display all routes
+print_routes = true
 
 # --- Security config
 # --- This handle encryption and hashing

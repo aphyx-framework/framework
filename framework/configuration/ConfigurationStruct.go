@@ -10,8 +10,9 @@ import (
 // This struct is used to store the configuration for the framework
 type Configuration struct {
 	Application struct {
-		Name string `toml:"name"`
-		Port string `toml:"port"`
+		Name        string `toml:"name"`
+		Port        string `toml:"port"`
+		PrintRoutes bool   `toml:"print_routes"`
 	} `toml:"application"`
 
 	Security struct {

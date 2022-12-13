@@ -1,14 +1,14 @@
 package main
 
 import (
-	"RyftFramework/app"
-	"RyftFramework/framework/bootstrapper"
-	"RyftFramework/framework/cli"
-	"RyftFramework/framework/configuration"
-	"RyftFramework/framework/database"
-	"RyftFramework/framework/fiberServer"
-	"RyftFramework/framework/logging"
-	"RyftFramework/framework/router"
+	"github.com/rama-adi/RyFT-Framework/app"
+	"github.com/rama-adi/RyFT-Framework/framework/bootstrapper"
+	"github.com/rama-adi/RyFT-Framework/framework/cli"
+	"github.com/rama-adi/RyFT-Framework/framework/configuration"
+	"github.com/rama-adi/RyFT-Framework/framework/database"
+	"github.com/rama-adi/RyFT-Framework/framework/fiberServer"
+	"github.com/rama-adi/RyFT-Framework/framework/logging"
+	"github.com/rama-adi/RyFT-Framework/framework/router"
 	"go.uber.org/fx"
 	"os"
 )

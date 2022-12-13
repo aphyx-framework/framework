@@ -1,9 +1,9 @@
 package AuthController
 
 import (
-	"RyftFramework/app/models"
-	"RyftFramework/app/utils"
 	"github.com/gofiber/fiber/v2"
+	"github.com/rama-adi/RyFT-Framework/app/models"
+	"github.com/rama-adi/RyFT-Framework/app/utils"
 )
 
 func UserHandler(c *fiber.Ctx) error {

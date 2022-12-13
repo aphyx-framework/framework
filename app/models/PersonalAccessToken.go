@@ -1,9 +1,9 @@
 package models
 
 import (
-	"RyftFramework/app"
-	utils2 "RyftFramework/app/utils"
-	"RyftFramework/framework/configuration"
+	"github.com/rama-adi/RyFT-Framework/app"
+	utils2 "github.com/rama-adi/RyFT-Framework/app/utils"
+	"github.com/rama-adi/RyFT-Framework/framework/configuration"
 	"go.uber.org/fx"
 	"gorm.io/gorm"
 	"time"

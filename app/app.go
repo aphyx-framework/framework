@@ -1,8 +1,8 @@
 package app
 
 import (
-	"RyftFramework/framework/configuration"
-	"RyftFramework/framework/logging"
+	"github.com/rama-adi/RyFT-Framework/framework/configuration"
+	"github.com/rama-adi/RyFT-Framework/framework/logging"
 	"gorm.io/gorm"
 )
 

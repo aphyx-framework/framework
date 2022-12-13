@@ -1,8 +1,8 @@
 package bootstrapper
 
 import (
-	"RyftFramework/framework/configuration"
 	"github.com/TwiN/go-color"
+	"github.com/rama-adi/RyFT-Framework/framework/configuration"
 )
 
 func PrintEnabledFeatures(config configuration.Configuration) {

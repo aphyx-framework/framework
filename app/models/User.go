@@ -1,10 +1,10 @@
 package models
 
 import (
-	"RyftFramework/app"
-	"RyftFramework/app/utils"
 	"errors"
 	"github.com/gofiber/fiber/v2"
+	"github.com/rama-adi/RyFT-Framework/app"
+	"github.com/rama-adi/RyFT-Framework/app/utils"
 	"gorm.io/gorm"
 	"time"
 )

@@ -1,8 +1,8 @@
 package models
 
 import (
-	"RyftFramework/app/utils"
 	"github.com/brianvoe/gofakeit/v6"
+	"github.com/rama-adi/RyFT-Framework/app/utils"
 	"gorm.io/gorm"
 )
 

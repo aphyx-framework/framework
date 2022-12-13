@@ -1,9 +1,9 @@
 package AuthController
 
 import (
-	models2 "RyftFramework/app/models"
-	"RyftFramework/app/utils"
 	"github.com/gofiber/fiber/v2"
+	models2 "github.com/rama-adi/RyFT-Framework/app/models"
+	"github.com/rama-adi/RyFT-Framework/app/utils"
 )
 
 func LogoutHandler(c *fiber.Ctx) error {

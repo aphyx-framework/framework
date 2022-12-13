@@ -1,9 +1,9 @@
 package ExampleController
 
 import (
-	"RyftFramework/app"
-	"RyftFramework/app/utils"
 	"github.com/gofiber/fiber/v2"
+	"github.com/rama-adi/RyFT-Framework/app"
+	"github.com/rama-adi/RyFT-Framework/app/utils"
 )
 
 // HelloHandler ---

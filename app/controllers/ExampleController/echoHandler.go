@@ -1,8 +1,8 @@
 package ExampleController
 
 import (
-	"RyftFramework/app/utils"
 	"github.com/gofiber/fiber/v2"
+	"github.com/rama-adi/RyFT-Framework/app/utils"
 )
 
 // EchoHandler ---

@@ -1,11 +1,11 @@
 package cli
 
 import (
-	"RyftFramework/framework/cli/migration"
-	"RyftFramework/framework/configuration"
-	"RyftFramework/framework/database"
-	"RyftFramework/framework/logging"
 	"flag"
+	"github.com/rama-adi/RyFT-Framework/framework/cli/migration"
+	"github.com/rama-adi/RyFT-Framework/framework/configuration"
+	"github.com/rama-adi/RyFT-Framework/framework/database"
+	"github.com/rama-adi/RyFT-Framework/framework/logging"
 	"go.uber.org/fx"
 	"gorm.io/gorm"
 	"os"

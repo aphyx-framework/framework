@@ -1,9 +1,9 @@
 package migration
 
 import (
-	"RyftFramework/app/models"
-	"RyftFramework/app/utils"
-	"RyftFramework/framework/logging"
+	"github.com/rama-adi/RyFT-Framework/app/models"
+	"github.com/rama-adi/RyFT-Framework/app/utils"
+	"github.com/rama-adi/RyFT-Framework/framework/logging"
 	"gorm.io/gorm"
 )
 

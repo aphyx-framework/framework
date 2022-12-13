@@ -1,8 +1,8 @@
 package bootstrapper
 
 import (
-	"RyftFramework/framework/configuration"
-	"RyftFramework/framework/logging"
+	"github.com/rama-adi/RyFT-Framework/framework/configuration"
+	"github.com/rama-adi/RyFT-Framework/framework/logging"
 )
 
 func checkAuthenticationConfig(config configuration.Configuration, logger logging.ApplicationLogger) {

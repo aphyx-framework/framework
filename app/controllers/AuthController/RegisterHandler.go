@@ -1,13 +1,13 @@
 package AuthController
 
 import (
-	"RyftFramework/app"
-	"RyftFramework/app/models"
-	utils2 "RyftFramework/app/utils"
 	"encoding/json"
 	"errors"
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/gofiber/fiber/v2"
+	"github.com/rama-adi/RyFT-Framework/app"
+	"github.com/rama-adi/RyFT-Framework/app/models"
+	utils2 "github.com/rama-adi/RyFT-Framework/app/utils"
 	"gorm.io/gorm"
 	"net/mail"
 )

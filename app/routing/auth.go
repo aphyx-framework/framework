@@ -1,8 +1,8 @@
 package routing
 
 import (
-	AuthController2 "RyftFramework/app/controllers/AuthController"
 	"github.com/gofiber/fiber/v2"
+	AuthController2 "github.com/rama-adi/RyFT-Framework/app/controllers/AuthController"
 )
 
 // AuthRoutes ---

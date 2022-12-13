@@ -1,10 +1,10 @@
 package fiberServer
 
 import (
-	"RyftFramework/framework/configuration"
-	"RyftFramework/framework/logging"
 	"context"
 	"github.com/gofiber/fiber/v2"
+	"github.com/rama-adi/RyFT-Framework/framework/configuration"
+	"github.com/rama-adi/RyFT-Framework/framework/logging"
 	"go.uber.org/fx"
 )
 
@@ -13,7 +13,7 @@ func NewFiberHttpServer(config configuration.Configuration) *fiber.App {
 	app := fiber.New(fiber.Config{
 		DisableStartupMessage: true,
 		AppName:               config.Application.Name,
-		EnablePrintRoutes:     true,
+		EnablePrintRoutes:     config.Application.PrintRoutes,
 	})
 
 	return app

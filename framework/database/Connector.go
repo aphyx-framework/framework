@@ -1,8 +1,8 @@
 package database
 
 import (
-	"RyftFramework/framework/configuration"
 	"fmt"
+	"github.com/rama-adi/RyFT-Framework/framework/configuration"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )

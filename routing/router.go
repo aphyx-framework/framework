@@ -35,8 +35,8 @@ func loadApiRoutes(app *fiber.App) {
 // If auth is enabled, then the auth routing will be loaded
 // If not, then it will return a 404
 func loadAuthRoute(app *fiber.App) {
-	config := di.Dependency.Get("config").(configuration.Configuration)
-	logger := di.Dependency.Get("logger").(logging.ApplicationLogger)
+	config := di.Dependency.Get(di.Config).(configuration.Configuration)
+	logger := di.Dependency.Get(di.Logger).(logging.ApplicationLogger)
 
 	auth := app.Group(config.Authentication.AuthenticationUrl)
 	auth.Use(func(c *fiber.Ctx) error {

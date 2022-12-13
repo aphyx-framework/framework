@@ -3,8 +3,8 @@ package migration
 import (
 	"RyftFramework/bootstrapper/logging"
 	"RyftFramework/configuration"
+	"RyftFramework/di"
 	"RyftFramework/models"
-	"RyftFramework/utils"
 	"fmt"
 	"github.com/BurntSushi/toml"
 	"gorm.io/driver/mysql"
@@ -16,19 +16,19 @@ var config configuration.Configuration
 var DB *gorm.DB
 
 func RunMigrator(fresh bool, seed bool) {
-	logging.LoadLogger()
-	utils.InfoLogger.Println("Migration Started")
+	logger := di.Dependency.Get(di.Logger).(logging.ApplicationLogger)
+	logger.InfoLogger.Println("Migration Started")
 	bootstrap()
 
 	if fresh {
-		utils.InfoLogger.Println("Doing a fresh migration..")
+		logger.InfoLogger.Println("Doing a fresh migration..")
 		dropAllTables()
 	}
 
 	doMigrations()
 
 	if seed {
-		utils.InfoLogger.Println("Seeding the migration..")
+		logger.InfoLogger.Println("Seeding the migration..")
 		runSeeder()
 	}
 
@@ -39,29 +39,31 @@ func RunMigrator(fresh bool, seed bool) {
 // This function is responsible for dropping all the tables defined in RegisterModel
 // If you pass -fresh flag, this function will run
 func dropAllTables() {
+	logger := di.Dependency.Get(di.Logger).(logging.ApplicationLogger)
 	for _, model := range models.RegisteredModels() {
-		utils.InfoLogger.Println("Dropping table for model: ", model.Name)
+		logger.InfoLogger.Println("Dropping table for model: ", model.Name)
 		err := DB.Migrator().DropTable(model.Model)
 
 		if err != nil {
-			utils.ErrorLogger.Println("Failed to drop table for model: ", model.Name)
-			utils.ErrorLogger.Println(err)
+			logger.ErrorLogger.Println("Failed to drop table for model: ", model.Name)
+			logger.ErrorLogger.Println(err)
 		} else {
-			utils.InfoLogger.Println("✓ Dropped table for model: ", model.Name)
+			logger.InfoLogger.Println("✓ Dropped table for model: ", model.Name)
 		}
 	}
 }
 
 func doMigrations() {
+	logger := di.Dependency.Get(di.Logger).(logging.ApplicationLogger)
 	for _, model := range models.RegisteredModels() {
-		utils.InfoLogger.Println("Migrating the model: ", model.Name)
+		logger.InfoLogger.Println("Migrating the model: ", model.Name)
 		err := DB.Migrator().CreateTable(model.Model)
 
 		if err != nil {
-			utils.ErrorLogger.Println("Failed to create table for model: ", model.Name)
-			utils.ErrorLogger.Println(err)
+			logger.ErrorLogger.Println("Failed to create table for model: ", model.Name)
+			logger.ErrorLogger.Println(err)
 		} else {
-			utils.InfoLogger.Println("✓ Created table for model: ", model.Name)
+			logger.InfoLogger.Println("✓ Created table for model: ", model.Name)
 		}
 	}
 }

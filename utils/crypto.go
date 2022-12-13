@@ -1,7 +1,9 @@
 package utils
 
 import (
+	"RyftFramework/bootstrapper/logging"
 	"RyftFramework/configuration"
+	"RyftFramework/di"
 	"crypto/aes"
 	"encoding/hex"
 	"golang.org/x/crypto/bcrypt"
@@ -11,9 +13,10 @@ import (
 //
 // This function is used to hash the password using bcrypt
 func HashPassword(password string) string {
+	logger := di.Dependency.Get(di.Logger).(logging.ApplicationLogger)
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
-		ErrorLogger.Fatalln(err)
+		logger.ErrorLogger.Fatalln(err)
 	}
 	return string(bytes)
 }
@@ -27,11 +30,13 @@ func CheckPasswordHash(password, hash string) bool {
 }
 
 func EncryptString(plainText string) (string, error) {
+	config := di.Dependency.Get(di.Config).(configuration.Configuration)
+	logger := di.Dependency.Get(di.Logger).(logging.ApplicationLogger)
 
-	c, err := aes.NewCipher([]byte(configuration.ApplicationConfig.Security.Key))
+	c, err := aes.NewCipher([]byte(config.Security.Key))
 
 	if err != nil {
-		ErrorLogger.Print(err)
+		logger.ErrorLogger.Print(err)
 		return "", err
 	}
 

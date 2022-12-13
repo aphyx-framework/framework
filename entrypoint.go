@@ -31,6 +31,7 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
+		container.BuildForMigrator()
 		migration.RunMigrator(*fresh, *seed)
 	default:
 		panic("Unknown command")
@@ -44,6 +45,10 @@ func main() {
 // and setting up the required dependencies.
 func BootstrapFramework() {
 	container.BuildAppFull()
+	printAsciiArt()
+	checkSecurityConfig()
+	checkAuthenticationConfig()
+	printEnabledFeature()
 	defer func(appDi di.Container) {
 		err := appDi.Delete()
 		if err != nil {
@@ -51,13 +56,8 @@ func BootstrapFramework() {
 		}
 	}(container.Dependency)
 
-	app := container.Dependency.Get("fiberServer").(*fiber.App)
-
-	printAsciiArt()
+	app := container.Dependency.Get(container.FiberServer).(*fiber.App)
 	routing.LoadRouter(app)
-	checkSecurityConfig()
-	checkAuthenticationConfig()
-	printEnabledFeature()
 
 }
 
@@ -67,7 +67,7 @@ func BootstrapFramework() {
 // If feature is enabled, it will show a green check mark
 // If feature is disabled, it will show a red cross mark
 func printEnabledFeature() {
-	config := container.Dependency.Get("config").(configuration.Configuration)
+	config := container.Dependency.Get(container.Config).(configuration.Configuration)
 
 	println("Enabled features: ")
 	if config.Database.Enabled {
@@ -95,8 +95,8 @@ func printEnabledFeature() {
 // It is a basic check to make sure that the secret key is set
 // And you didn't enable debug mode in production
 func checkSecurityConfig() {
-	config := container.Dependency.Get("config").(configuration.Configuration)
-	logger := container.Dependency.Get("logger").(logging.ApplicationLogger)
+	config := container.Dependency.Get(container.Config).(configuration.Configuration)
+	logger := container.Dependency.Get(container.Logger).(logging.ApplicationLogger)
 
 	if config.Security.Key == "" {
 		logger.ErrorLogger.Fatalln("Security key is not set")
@@ -113,8 +113,8 @@ func checkSecurityConfig() {
 // For authentication to work, a valid URL and key must be set
 // And migration must be enabled
 func checkAuthenticationConfig() {
-	config := container.Dependency.Get("config").(configuration.Configuration)
-	logger := container.Dependency.Get("logger").(logging.ApplicationLogger)
+	config := container.Dependency.Get(container.Config).(configuration.Configuration)
+	logger := container.Dependency.Get(container.Logger).(logging.ApplicationLogger)
 
 	if config.Authentication.Enabled == true && config.Authentication.AuthenticationUrl == "" {
 		logger.ErrorLogger.Fatalln("Authentication URL is not set")

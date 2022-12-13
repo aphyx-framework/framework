@@ -1,7 +1,8 @@
 package utils
 
 import (
-	"github.com/go-playground/validator"
+	"RyftFramework/bootstrapper/logging"
+	"RyftFramework/di"
 	"net/url"
 )
 
@@ -23,25 +24,12 @@ type ErrorResponse struct {
 }
 
 func DecodeUrlParam(param string) string {
+	logger := di.Dependency.Get(di.Logger).(logging.ApplicationLogger)
 	decoded, err := url.QueryUnescape(param)
 
 	if err != nil {
-		ErrorLogger.Fatalln(err)
+		logger.ErrorLogger.Fatalln(err)
 	}
 
 	return decoded
-}
-
-func GetErrors(err error) []*ErrorResponse {
-	var errors []*ErrorResponse
-
-	for _, err := range err.(validator.ValidationErrors) {
-		var element ErrorResponse
-		element.FailedField = err.StructNamespace()
-		element.Tag = err.Tag()
-		element.Value = err.Value().(string)
-		errors = append(errors, &element)
-	}
-
-	return errors
 }

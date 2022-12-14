@@ -16,9 +16,15 @@ import (
 	"strings"
 )
 
-func RunCliApplication() {
+func RunCliApplication(enableNopLogger bool) {
+	nop := fx.Options()
+
+	if enableNopLogger == false {
+		nop = fx.Options(fx.NopLogger)
+	}
+
 	fx.New(
-		fx.NopLogger,
+		nop,
 		fx.Provide(configuration.NewConfiguration),
 		fx.Provide(logging.NewLogger),
 		fx.Provide(database.NewDbConnection),

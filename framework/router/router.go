@@ -13,7 +13,6 @@ import (
 func RegisterAllRoutes(logger logging.ApplicationLogger, app *fiber.App, config configuration.Configuration) any {
 	LoadApiRoutes(app)
 	LoadAuthRoute(app, logger, config)
-
 	return nil
 }
 

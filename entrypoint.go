@@ -1,45 +1,18 @@
 package main
 
 import (
-	"github.com/rama-adi/RyFT-Framework/app"
-	"github.com/rama-adi/RyFT-Framework/framework/bootstrapper"
+	"github.com/rama-adi/RyFT-Framework/framework"
 	"github.com/rama-adi/RyFT-Framework/framework/cli"
-	"github.com/rama-adi/RyFT-Framework/framework/configuration"
-	"github.com/rama-adi/RyFT-Framework/framework/database"
-	"github.com/rama-adi/RyFT-Framework/framework/fiberServer"
-	"github.com/rama-adi/RyFT-Framework/framework/logging"
-	"github.com/rama-adi/RyFT-Framework/framework/router"
-	"go.uber.org/fx"
 	"os"
 )
 
 func main() {
+	// If you want to debug the DI container, set this to true
+	const EnableNopLogger = false
+
 	if len(os.Args) < 2 {
-		// If no argument is passed, start the server
-		runApplication()
+		framework.RunWebApplication(EnableNopLogger) // If no argument is passed, start the server
 	} else {
-		cli.RunCliApplication()
+		cli.RunCliApplication(EnableNopLogger) // Invoke the CLI application
 	}
-}
-
-func runApplication() {
-	fx.New(
-		//fx.NopLogger,
-		fx.Provide(configuration.NewConfiguration),
-		fx.Provide(logging.NewLogger),
-		fx.Provide(database.NewDbConnection),
-
-		// Populate the app package with the configuration, logger and database connection
-		fx.Populate(&app.DB),
-		fx.Populate(&app.Config),
-		fx.Populate(&app.Logger),
-
-		// Load user defined dependencies
-		app.Dependencies,
-
-		fx.Provide(fiberServer.NewFiberHttpServer),
-		fx.Invoke(bootstrapper.AllBootstrapper),
-		fx.Invoke(router.RegisterAllRoutes),
-		fx.Invoke(fiberServer.EnableFiberServer),
-	).Run()
 }

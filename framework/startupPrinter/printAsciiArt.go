@@ -1,4 +1,4 @@
-package bootstrapper
+package startupPrinter
 
 import "github.com/TwiN/go-color"
 

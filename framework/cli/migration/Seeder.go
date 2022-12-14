@@ -1,6 +1,7 @@
 package migration
 
 import (
+	"github.com/TwiN/go-color"
 	"github.com/rama-adi/RyFT-Framework/app/models"
 	"github.com/rama-adi/RyFT-Framework/app/utils"
 	"github.com/rama-adi/RyFT-Framework/framework/logging"
@@ -11,9 +12,11 @@ func runSeeder(logger logging.ApplicationLogger, db *gorm.DB) {
 
 	for _, model := range models.RegisteredModels() {
 		if model.Seeder != nil {
-			logger.InfoLogger.Println("Seeding table for model: ", model.Name)
+			logger.InfoLogger.Println(color.CyanBackground+color.Black+
+				" [O] "+color.Reset+" Seeding table for model: ", model.Name)
 			doSeeding(*model.Seeder, logger, db)
-			logger.InfoLogger.Println("✓ Seeded table for model: ", model.Name)
+			logger.InfoLogger.Println(color.GreenBackground+color.Black+
+				" [✓] "+color.Reset+" Seeded table for model: ", model.Name)
 		}
 	}
 }

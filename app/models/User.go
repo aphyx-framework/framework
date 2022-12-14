@@ -16,13 +16,6 @@ type User struct {
 	Password            string                `json:"-"`
 }
 
-type UserWithToken struct {
-	Name      string    `json:"name"`
-	Email     string    `json:"email"`
-	Token     string    `json:"token"`
-	ExpiresAt time.Time `json:"expires_at"`
-}
-
 func (_ User) Login(email string, password string) (*User, error) {
 	var user User
 
@@ -35,7 +28,7 @@ func (_ User) Login(email string, password string) (*User, error) {
 	return nil, errors.New("invalid email or password")
 }
 
-func (u User) Register() (*UserWithToken, error) {
+func (u User) Register() (*PersonalAccessTokenResponse, error) {
 
 	if err := app.DB.Create(&u).Error; err != nil {
 		return nil, err
@@ -47,12 +40,7 @@ func (u User) Register() (*UserWithToken, error) {
 		return nil, err
 	}
 
-	return &UserWithToken{
-		Name:      u.Name,
-		Email:     u.Email,
-		Token:     token.Token,
-		ExpiresAt: token.ExpiresAt,
-	}, nil
+	return &token, nil
 
 }
 

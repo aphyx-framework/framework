@@ -38,6 +38,18 @@ func (_ PersonalAccessToken) RevokeToken(token string) error {
 	return app.DB.Delete(&PersonalAccessToken{}, "token = ?", tokenEnc).Error
 }
 
+func (_ PersonalAccessToken) Find(token string) PersonalAccessTokenResponse {
+	var pat PersonalAccessToken
+	app.DB.Where("token = ?", token).First(&pat)
+	return PersonalAccessTokenResponse{
+		ID:        pat.ID,
+		UserID:    pat.UserID,
+		Name:      pat.Name,
+		Token:     pat.Token,
+		ExpiresAt: pat.ExpiresAt,
+	}
+}
+
 func (_ PersonalAccessToken) CreateTokenForUser(user User, name string, permanent bool) (PersonalAccessTokenResponse, error) {
 	plaintextToken := app.Utilities.RandomString(40)
 

@@ -43,7 +43,7 @@ func repl(logger logging.ApplicationLogger, config configuration.Configuration, 
 	logger.InfoLogger.Println("Type 'exit' to exit the REPL")
 
 	for {
-		fmt.Print(">> ")
+		fmt.Print("[Ryft] >> ")
 		scanner := bufio.NewScanner(os.Stdin)
 		input := ""
 

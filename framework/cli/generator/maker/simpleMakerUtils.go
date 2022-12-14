@@ -1,6 +1,7 @@
 package maker
 
 import (
+	"github.com/TwiN/go-color"
 	"github.com/rama-adi/RyFT-Framework/framework/logging"
 	"os"
 	"strings"
@@ -53,4 +54,9 @@ func replaceAllPlaceholders(stub string, placeholderReplacer []PlaceholderReplac
 	}
 
 	return stub
+}
+
+func logSuccess(message string, logger logging.ApplicationLogger) {
+	logger.InfoLogger.Println(color.GreenBackground + color.Black +
+		" [✓] " + color.Reset + " " + message)
 }

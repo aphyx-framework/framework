@@ -29,5 +29,12 @@ func Generator(generatorType string, args []string, logger logging.ApplicationLo
 		} else {
 			maker.ControllerMaker(args[0], moduleName, args[1], logger)
 		}
+	case "model":
+		if len(args) < 1 {
+			logger.ErrorLogger.Println("Insufficient arguments. Please read the documentation below")
+			maker.ModelMakerInfo(logger)
+		} else {
+			maker.ModelMaker(args[0], moduleName, logger)
+		}
 	}
 }

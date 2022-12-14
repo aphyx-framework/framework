@@ -1,0 +1,14 @@
+package models
+
+import (
+	"errors"
+	"github.com/gofiber/fiber/v2"
+	"__APP_BASE_PKG__/app"
+	"__APP_BASE_PKG__/app/utils"
+	"gorm.io/gorm"
+)
+
+type __MODEL_NAME__ struct {
+	gorm.Model
+	// Add your fields here
+}

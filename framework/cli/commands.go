@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
+	"github.com/rama-adi/RyFT-Framework/app/utils"
 	"github.com/rama-adi/RyFT-Framework/framework/cli/generator"
 	"github.com/rama-adi/RyFT-Framework/framework/cli/migration"
 	"github.com/rama-adi/RyFT-Framework/framework/configuration"
@@ -82,9 +83,12 @@ func parseCommand(
 		migration.RunMigrator(fresh, seed, logger, db)
 	case "make":
 		generator.Generator(args[0], args[1:], logger)
+	case "createkey":
+		key := utils.RandStringRunes(32)
+		logger.InfoLogger.Println("Generated key: ", key)
+		logger.InfoLogger.Println("Please add this key to your config.toml file in the 'security' > key section")
 	default:
 		return errors.New("invalid command")
 	}
-
 	return nil
 }

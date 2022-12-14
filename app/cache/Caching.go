@@ -15,6 +15,7 @@ func Init() Table {
 	}
 }
 
+// CacheOrMake will cache the data if it's not cached yet, or return the cached data if it's already cached
 func (_ Table) CacheOrMake(
 	table *cache2go.CacheTable,
 	key string,

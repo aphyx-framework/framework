@@ -3,8 +3,6 @@ package models
 import (
 	"github.com/rama-adi/RyFT-Framework/app"
 	utils2 "github.com/rama-adi/RyFT-Framework/app/utils"
-	"github.com/rama-adi/RyFT-Framework/framework/configuration"
-	"go.uber.org/fx"
 	"gorm.io/gorm"
 	"time"
 )
@@ -32,10 +30,7 @@ func (pat PersonalAccessToken) Logout() error {
 
 func (_ PersonalAccessToken) RevokeToken(token string) error {
 
-	var config *configuration.Configuration
-	fx.Populate(&config)
-
-	tokenEnc, err := utils2.EncryptString(token, config.Security.Key)
+	tokenEnc, err := utils2.EncryptString(token, app.Config.Security.Key)
 
 	if err != nil {
 		return err
@@ -57,10 +52,7 @@ func (_ PersonalAccessToken) CreateTokenForUser(user User, name string, permanen
 		expiry = time.Now().AddDate(0, 1, 0)
 	}
 
-	var config *configuration.Configuration
-	fx.Populate(&config)
-
-	tokenEnc, err := utils2.EncryptString(plaintextToken, config.Security.Key)
+	tokenEnc, err := utils2.EncryptString(plaintextToken, app.Config.Security.Key)
 
 	if err != nil {
 		return PersonalAccessTokenResponse{}, err

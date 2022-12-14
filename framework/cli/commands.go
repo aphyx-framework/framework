@@ -1,7 +1,9 @@
 package cli
 
 import (
-	"flag"
+	"bufio"
+	"errors"
+	"fmt"
 	"github.com/rama-adi/RyFT-Framework/framework/cli/generator"
 	"github.com/rama-adi/RyFT-Framework/framework/cli/migration"
 	"github.com/rama-adi/RyFT-Framework/framework/configuration"
@@ -10,6 +12,7 @@ import (
 	"go.uber.org/fx"
 	"gorm.io/gorm"
 	"os"
+	"strings"
 )
 
 func RunCliApplication() {
@@ -19,25 +22,69 @@ func RunCliApplication() {
 		fx.Provide(logging.NewLogger),
 		fx.Provide(database.NewDbConnection),
 		fx.Invoke(runCliCommand),
-		fx.Invoke(func() { os.Exit(0) }),
 	).Run()
 }
 
 func runCliCommand(logger logging.ApplicationLogger, config configuration.Configuration, db *gorm.DB) {
-
-	switch os.Args[1] {
-	case "migrate":
-		migratorFlag := flag.NewFlagSet("migrate", flag.ExitOnError)
-		fresh := migratorFlag.Bool("fresh", false, "Drop all table defined in RegisterModel")
-		seed := migratorFlag.Bool("seed", false, "Seed the migration with data defined in the seeder")
-		err := migratorFlag.Parse(os.Args[2:])
+	if os.Args[1] == "repl" {
+		repl(logger, config, db)
+		os.Exit(0)
+	} else {
+		err := parseCommand(os.Args[1], os.Args[2:], logger, config, db)
 		if err != nil {
-			panic(err)
+			logger.ErrorLogger.Fatalln(err)
 		}
-		migration.RunMigrator(*fresh, *seed, logger, db)
-	case "make":
-		generator.Generator(os.Args[2], logger)
-	default:
-		panic("Unknown command")
+		os.Exit(0)
 	}
+}
+
+func repl(logger logging.ApplicationLogger, config configuration.Configuration, db *gorm.DB) {
+	logger.InfoLogger.Println("RyFT Framework REPL")
+	logger.InfoLogger.Println("Type 'exit' to exit the REPL")
+
+	for {
+		fmt.Print(">> ")
+		scanner := bufio.NewScanner(os.Stdin)
+		input := ""
+
+		for scanner.Scan() {
+			input = scanner.Text()
+			break
+		}
+
+		if input == "exit" {
+			break
+		}
+
+		args := strings.Split(input, " ")
+		err := parseCommand(args[0], args[1:], logger, config, db)
+
+		if err != nil {
+			logger.ErrorLogger.Println(err)
+		}
+	}
+
+	logger.InfoLogger.Println("Exiting REPL")
+	os.Exit(0)
+
+}
+func parseCommand(
+	command string,
+	args []string,
+	logger logging.ApplicationLogger,
+	config configuration.Configuration,
+	db *gorm.DB,
+) error {
+	switch command {
+	case "migrate":
+		fresh := args[0] == "fresh"
+		seed := args[1] == "seed"
+		migration.RunMigrator(fresh, seed, logger, db)
+	case "make":
+		generator.Generator(args[0], args[1:], logger)
+	default:
+		return errors.New("invalid command")
+	}
+
+	return nil
 }

@@ -18,18 +18,16 @@ func getModuleName(logger logging.ApplicationLogger) string {
 	return modName
 }
 
-func Generator(generatorType string, logger logging.ApplicationLogger) {
+func Generator(generatorType string, args []string, logger logging.ApplicationLogger) {
 	moduleName := getModuleName(logger)
 
 	switch generatorType {
 	case "controller":
-
-		if len(os.Args) < 4 {
+		if len(args) < 2 {
 			logger.ErrorLogger.Println("Insufficient arguments. Please read the documentation below")
 			maker.ControllerMakerInfo(logger)
 		} else {
-			handlerName := os.Args[4]
-			maker.ControllerMaker(os.Args[3], moduleName, handlerName, logger)
+			maker.ControllerMaker(args[0], moduleName, args[1], logger)
 		}
 	}
 }

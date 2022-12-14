@@ -27,11 +27,11 @@ Work in progress
 
 ## Getting Started
 
-1. Clone the "next" branch from https://github.com/rama-adi/RyFT-Framework
+1. Clone repository from https://github.com/rama-adi/RyFT-Framework
 2. Rename the module name in the `go.mod` to be aligned with your project
 3. Copy `.example.config.toml` and name it `config.toml` in the root folder
 4. Change the app name, port
-5. Create a 32-character long key and put it in `config.toml` under `app.key`
+5. Create a 32-character long key with `go run main.go createkey`
 6. Optionally enable features like database, auth, caching
 7. Run the app via `go run entrypoint.go`
 

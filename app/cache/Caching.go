@@ -2,6 +2,7 @@ package cache
 
 import (
 	"github.com/muesli/cache2go"
+	"github.com/rama-adi/RyFT-Framework/app"
 	"time"
 )
 
@@ -21,6 +22,11 @@ func (_ Table) CacheOrMake(
 	key string,
 	f func() (interface{}, error, time.Duration),
 ) (interface{}, error) {
+	if app.Config.Caching.Enabled == false {
+		val, err, _ := f()
+		return val, err
+	}
+
 	// Simple caching function
 	if table.Exists(key) {
 		cacheValue, cacheError := table.Value(key)

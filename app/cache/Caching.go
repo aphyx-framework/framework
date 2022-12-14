@@ -2,27 +2,29 @@ package cache
 
 import (
 	"github.com/muesli/cache2go"
-	"github.com/rama-adi/RyFT-Framework/app"
+	"github.com/rama-adi/RyFT-Framework/framework/configuration"
 	"time"
 )
 
 type Table struct {
-	Auth *cache2go.CacheTable
+	Auth   *cache2go.CacheTable
+	config configuration.Configuration
 }
 
-func Init() Table {
+func Init(config configuration.Configuration) Table {
 	return Table{
-		Auth: cache2go.Cache("auth"),
+		Auth:   cache2go.Cache("auth"),
+		config: config,
 	}
 }
 
 // CacheOrMake will cache the data if it's not cached yet, or return the cached data if it's already cached
-func (_ Table) CacheOrMake(
+func (t Table) CacheOrMake(
 	table *cache2go.CacheTable,
 	key string,
 	f func() (interface{}, error, time.Duration),
 ) (interface{}, error) {
-	if app.Config.Caching.Enabled == false {
+	if t.config.Caching.Enabled == false {
 		val, err, _ := f()
 		return val, err
 	}
@@ -42,4 +44,17 @@ func (_ Table) CacheOrMake(
 		return data, nil
 	}
 
+}
+
+func (t Table) BustCache(
+	table *cache2go.CacheTable,
+	key string,
+) error {
+
+	if t.config.Caching.Enabled == false {
+		return nil
+	}
+
+	_, err := table.Delete(key)
+	return err
 }

@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
-	"github.com/rama-adi/RyFT-Framework/app/utils"
 	"github.com/rama-adi/RyFT-Framework/framework/cli/generator"
 	"github.com/rama-adi/RyFT-Framework/framework/cli/migration"
 	"github.com/rama-adi/RyFT-Framework/framework/configuration"
@@ -12,6 +11,7 @@ import (
 	"github.com/rama-adi/RyFT-Framework/framework/logging"
 	"go.uber.org/fx"
 	"gorm.io/gorm"
+	"math/rand"
 	"os"
 	"strings"
 )
@@ -84,8 +84,12 @@ func parseCommand(
 	case "make":
 		generator.Generator(args[0], args[1:], logger)
 	case "createkey":
-		key := utils.RandStringRunes(32)
-		logger.InfoLogger.Println("Generated key: ", key)
+		var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+		b := make([]rune, 32)
+		for i := range b {
+			b[i] = letterRunes[rand.Intn(len(letterRunes))]
+		}
+		logger.InfoLogger.Println("Generated key: ", string(b))
 		logger.InfoLogger.Println("Please add this key to your config.toml file in the 'security' > key section")
 	default:
 		return errors.New("invalid command")

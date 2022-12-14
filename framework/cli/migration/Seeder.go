@@ -3,7 +3,7 @@ package migration
 import (
 	"github.com/TwiN/go-color"
 	"github.com/rama-adi/RyFT-Framework/app/models"
-	"github.com/rama-adi/RyFT-Framework/app/utils"
+	"github.com/rama-adi/RyFT-Framework/framework/database"
 	"github.com/rama-adi/RyFT-Framework/framework/logging"
 	"gorm.io/gorm"
 )
@@ -21,7 +21,7 @@ func runSeeder(logger logging.ApplicationLogger, db *gorm.DB) {
 	}
 }
 
-func doSeeding(seed utils.SeederDefinition, logger logging.ApplicationLogger, db *gorm.DB) {
+func doSeeding(seed database.SeederDefinition, logger logging.ApplicationLogger, db *gorm.DB) {
 	for i := 0; i < seed.Amount; i++ {
 		err := seed.Run(db)
 		if err != nil {

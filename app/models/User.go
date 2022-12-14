@@ -4,7 +4,6 @@ import (
 	"errors"
 	"github.com/gofiber/fiber/v2"
 	"github.com/rama-adi/RyFT-Framework/app"
-	"github.com/rama-adi/RyFT-Framework/app/utils"
 	"gorm.io/gorm"
 	"time"
 )
@@ -29,7 +28,7 @@ func (_ User) Login(email string, password string) (*User, error) {
 
 	app.DB.Where("email = ?", email).First(&user)
 
-	if utils.CheckPasswordHash(password, user.Password) {
+	if app.Utilities.VerifyPassword(password, user.Password) {
 		return &user, nil
 	}
 
@@ -61,7 +60,7 @@ func (_ User) FromAccessToken(token string) (*User, error) {
 
 	var personalAccessToken PersonalAccessToken
 
-	enc, err := utils.EncryptString(token, app.Config.Security.Key)
+	enc, err := app.Utilities.EncryptWithAppKey(token)
 
 	if err != nil {
 		return nil, err

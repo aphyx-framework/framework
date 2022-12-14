@@ -24,7 +24,7 @@ func main() {
 
 func runApplication() {
 	fx.New(
-		fx.NopLogger,
+		//fx.NopLogger,
 		fx.Provide(configuration.NewConfiguration),
 		fx.Provide(logging.NewLogger),
 		fx.Provide(database.NewDbConnection),
@@ -33,6 +33,9 @@ func runApplication() {
 		fx.Populate(&app.DB),
 		fx.Populate(&app.Config),
 		fx.Populate(&app.Logger),
+
+		// Load user defined dependencies
+		app.Dependencies,
 
 		fx.Provide(fiberServer.NewFiberHttpServer),
 		fx.Invoke(bootstrapper.AllBootstrapper),

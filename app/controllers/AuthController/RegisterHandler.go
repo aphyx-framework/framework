@@ -33,7 +33,7 @@ func RegisterHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	password, err := utils2.HashPassword(user.Password)
+	password, err := app.Utilities.HashPassword(user.Password)
 
 	newUser := models.User{
 		Name:     user.Name,

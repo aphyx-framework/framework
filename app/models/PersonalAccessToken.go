@@ -2,7 +2,6 @@ package models
 
 import (
 	"github.com/rama-adi/RyFT-Framework/app"
-	utils2 "github.com/rama-adi/RyFT-Framework/app/utils"
 	"gorm.io/gorm"
 	"time"
 )
@@ -30,7 +29,7 @@ func (pat PersonalAccessToken) Logout() error {
 
 func (_ PersonalAccessToken) RevokeToken(token string) error {
 
-	tokenEnc, err := utils2.EncryptString(token, app.Config.Security.Key)
+	tokenEnc, err := app.Utilities.EncryptWithAppKey(token)
 
 	if err != nil {
 		return err
@@ -40,7 +39,7 @@ func (_ PersonalAccessToken) RevokeToken(token string) error {
 }
 
 func (_ PersonalAccessToken) CreateTokenForUser(user User, name string, permanent bool) (PersonalAccessTokenResponse, error) {
-	plaintextToken := utils2.RandStringRunes(40)
+	plaintextToken := app.Utilities.RandomString(40)
 
 	var expiry time.Time
 
@@ -52,7 +51,7 @@ func (_ PersonalAccessToken) CreateTokenForUser(user User, name string, permanen
 		expiry = time.Now().AddDate(0, 1, 0)
 	}
 
-	tokenEnc, err := utils2.EncryptString(plaintextToken, app.Config.Security.Key)
+	tokenEnc, err := app.Utilities.EncryptWithAppKey(plaintextToken)
 
 	if err != nil {
 		return PersonalAccessTokenResponse{}, err

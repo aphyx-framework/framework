@@ -2,7 +2,8 @@ package models
 
 import (
 	"github.com/brianvoe/gofakeit/v6"
-	"github.com/rama-adi/RyFT-Framework/app/utils"
+	"github.com/rama-adi/RyFT-Framework/app"
+	"github.com/rama-adi/RyFT-Framework/framework/database"
 	"gorm.io/gorm"
 )
 
@@ -11,10 +12,10 @@ func RegisteredModels() []Model {
 		{
 			Name:  "User",
 			Model: User{},
-			Seeder: &utils.SeederDefinition{
+			Seeder: &database.SeederDefinition{
 				Amount: 10,
 				Run: func(db *gorm.DB) error {
-					password, err := utils.HashPassword("password")
+					password, err := app.Utilities.HashPassword("password")
 
 					if err != nil {
 						return err
@@ -41,5 +42,5 @@ func RegisteredModels() []Model {
 type Model struct {
 	Name   string
 	Model  interface{}
-	Seeder *utils.SeederDefinition
+	Seeder *database.SeederDefinition
 }

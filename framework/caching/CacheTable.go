@@ -23,7 +23,6 @@ func LoadCacheTable(config configuration.Configuration, logger logging.Applicati
 	initMap := make(map[string]CacheTable)
 
 	for _, value := range userCacheData {
-		logger.InfoLogger.Printf("Loading cache table %s", value)
 		initMap[value] = CacheTable{
 			Name:   value,
 			Table:  cache2go.Cache(value),

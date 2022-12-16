@@ -3,6 +3,7 @@ package middlewares
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/rama-adi/RyFT-Framework/app"
+	"github.com/rama-adi/RyFT-Framework/app/cache"
 	"github.com/rama-adi/RyFT-Framework/app/models"
 	"github.com/rama-adi/RyFT-Framework/app/utils"
 	"strings"
@@ -24,7 +25,7 @@ func WithAuthenticationData(c *fiber.Ctx) error {
 
 	rep := strings.Replace(authorizationHeader, "Bearer ", "", 1)
 
-	userCache, err := app.CacheTable["authToken"].CacheOrMake(rep, func() (interface{}, error, time.Duration) {
+	userCache, err := app.CacheTable[cache.AuthToken].CacheOrMake(rep, func() (interface{}, error, time.Duration) {
 		fromAccessToken, fromAccessTokenError := models.User{}.FromAccessToken(rep)
 		return fromAccessToken, fromAccessTokenError, time.Until(models.PersonalAccessToken{}.Find(rep).ExpiresAt)
 	})

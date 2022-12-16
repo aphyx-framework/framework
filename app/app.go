@@ -15,12 +15,12 @@ var (
 	DB         *gorm.DB
 	Logger     logging.ApplicationLogger
 	Utilities  utils.Util
-	CacheTable cache.Table
+	CacheTable cache.UserTable
 )
 
 var Dependencies = fx.Options(
 	fx.Provide(utils.NewUtil),
-	fx.Provide(cache.Init),
+	fx.Provide(cache.InitializeCacheTable),
 	fx.Populate(&Utilities),
 	fx.Populate(&CacheTable),
 )

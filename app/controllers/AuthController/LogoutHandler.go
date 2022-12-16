@@ -2,6 +2,7 @@ package AuthController
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/rama-adi/RyFT-Framework/app"
 	models2 "github.com/rama-adi/RyFT-Framework/app/models"
 	"github.com/rama-adi/RyFT-Framework/app/utils"
 )
@@ -17,6 +18,12 @@ func LogoutHandler(c *fiber.Ctx) error {
 			Message: err.Error(),
 			Data:    nil,
 		})
+	}
+
+	err = app.CacheTable.Auth.BustCache("user:bytoken:" + token)
+
+	if err != nil {
+		app.Logger.ErrorLogger.Println(err)
 	}
 
 	return c.Status(fiber.StatusOK).JSON(utils.HttpResponse{

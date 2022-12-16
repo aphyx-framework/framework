@@ -2,6 +2,7 @@ package framework
 
 import (
 	"github.com/rama-adi/RyFT-Framework/app"
+	"github.com/rama-adi/RyFT-Framework/framework/caching"
 	"github.com/rama-adi/RyFT-Framework/framework/configuration"
 	"github.com/rama-adi/RyFT-Framework/framework/database"
 	"github.com/rama-adi/RyFT-Framework/framework/fiberServer"
@@ -24,7 +25,7 @@ func RunWebApplication(enableNopLogger bool) {
 		fx.Provide(logging.NewLogger),
 		fx.Provide(database.NewDbConnection),
 
-		// Populate the app package with the configuration, logger and database connection
+		// Populate the app package with the configuration, logger, cache table and database connection
 		fx.Populate(&app.DB),
 		fx.Populate(&app.Config),
 		fx.Populate(&app.Logger),
@@ -33,8 +34,9 @@ func RunWebApplication(enableNopLogger bool) {
 		app.Dependencies,
 
 		fx.Provide(fiberServer.NewFiberHttpServer),
-		fx.Invoke(startupPrinter.AllBootstrapper),
 		fx.Invoke(router.RegisterAllRoutes),
+		fx.Provide(caching.LoadCacheTable),
+		fx.Invoke(startupPrinter.PrintStartupInfo),
 		fx.Invoke(fiberServer.EnableFiberServer),
 	).Run()
 }

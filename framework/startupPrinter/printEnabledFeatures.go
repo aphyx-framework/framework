@@ -5,7 +5,7 @@ import (
 	"github.com/rama-adi/RyFT-Framework/framework/configuration"
 )
 
-func PrintEnabledFeatures(config configuration.Configuration) {
+func printEnabledFeatures(config configuration.Configuration) {
 	println("Enabled features: ")
 	if config.Database.Enabled {
 		println(color.GreenBackground + color.Black + " [✓] " + color.Reset + color.Green + " Database" + color.Reset)

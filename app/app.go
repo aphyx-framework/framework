@@ -1,8 +1,8 @@
 package app
 
 import (
-	"github.com/rama-adi/RyFT-Framework/app/cache"
 	"github.com/rama-adi/RyFT-Framework/app/utils"
+	"github.com/rama-adi/RyFT-Framework/framework/caching"
 	"github.com/rama-adi/RyFT-Framework/framework/configuration"
 	"github.com/rama-adi/RyFT-Framework/framework/logging"
 	"go.uber.org/fx"
@@ -15,12 +15,11 @@ var (
 	DB         *gorm.DB
 	Logger     logging.ApplicationLogger
 	Utilities  utils.Util
-	CacheTable cache.UserTable
+	CacheTable map[string]caching.CacheTable
 )
 
 var Dependencies = fx.Options(
 	fx.Provide(utils.NewUtil),
-	fx.Provide(cache.InitializeCacheTable),
 	fx.Populate(&Utilities),
 	fx.Populate(&CacheTable),
 )

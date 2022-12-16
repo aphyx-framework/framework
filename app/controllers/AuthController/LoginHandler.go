@@ -5,7 +5,7 @@ import (
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/gofiber/fiber/v2"
 	models2 "github.com/rama-adi/RyFT-Framework/app/models"
-	"github.com/rama-adi/RyFT-Framework/app/utils"
+	"github.com/rama-adi/RyFT-Framework/framework/utils"
 )
 
 type UserLogin struct {

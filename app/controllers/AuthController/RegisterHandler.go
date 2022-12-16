@@ -7,7 +7,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/rama-adi/RyFT-Framework/app"
 	"github.com/rama-adi/RyFT-Framework/app/models"
-	utils2 "github.com/rama-adi/RyFT-Framework/app/utils"
+	utils2 "github.com/rama-adi/RyFT-Framework/framework/utils"
 	"gorm.io/gorm"
 	"net/mail"
 )
@@ -33,7 +33,7 @@ func RegisterHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	password, err := app.Utilities.HashPassword(user.Password)
+	password, err := app.Utilities.Crypto.HashPassword(user.Password)
 
 	newUser := models.User{
 		Name:     user.Name,

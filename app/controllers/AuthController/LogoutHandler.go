@@ -5,7 +5,7 @@ import (
 	"github.com/rama-adi/RyFT-Framework/app"
 	"github.com/rama-adi/RyFT-Framework/app/cache"
 	models2 "github.com/rama-adi/RyFT-Framework/app/models"
-	"github.com/rama-adi/RyFT-Framework/app/utils"
+	"github.com/rama-adi/RyFT-Framework/framework/utils"
 )
 
 func LogoutHandler(c *fiber.Ctx) error {

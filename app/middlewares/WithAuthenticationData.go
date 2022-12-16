@@ -5,7 +5,7 @@ import (
 	"github.com/rama-adi/RyFT-Framework/app"
 	"github.com/rama-adi/RyFT-Framework/app/cache"
 	"github.com/rama-adi/RyFT-Framework/app/models"
-	"github.com/rama-adi/RyFT-Framework/app/utils"
+	"github.com/rama-adi/RyFT-Framework/framework/utils"
 	"strings"
 	"time"
 )

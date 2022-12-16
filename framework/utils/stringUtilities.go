@@ -2,7 +2,9 @@ package utils
 
 import "math/rand"
 
-func (_ Util) RandomString(number int) string {
+type Strings struct{}
+
+func (_ Strings) Random(number int) string {
 	var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 	b := make([]rune, number)
 	for i := range b {

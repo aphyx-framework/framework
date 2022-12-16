@@ -29,7 +29,7 @@ func (pat PersonalAccessToken) Logout() error {
 
 func (_ PersonalAccessToken) RevokeToken(token string) error {
 
-	tokenEnc, err := app.Utilities.EncryptWithAppKey(token)
+	tokenEnc, err := app.Utilities.Crypto.EncryptWithAppKey(token)
 
 	if err != nil {
 		return err
@@ -51,7 +51,7 @@ func (_ PersonalAccessToken) Find(token string) PersonalAccessTokenResponse {
 }
 
 func (_ PersonalAccessToken) CreateTokenForUser(user User, name string, permanent bool) (PersonalAccessTokenResponse, error) {
-	plaintextToken := app.Utilities.RandomString(40)
+	plaintextToken := app.Utilities.Strings.Random(40)
 
 	var expiry time.Time
 
@@ -63,7 +63,7 @@ func (_ PersonalAccessToken) CreateTokenForUser(user User, name string, permanen
 		expiry = time.Now().AddDate(0, 1, 0)
 	}
 
-	tokenEnc, err := app.Utilities.EncryptWithAppKey(plaintextToken)
+	tokenEnc, err := app.Utilities.Crypto.EncryptWithAppKey(plaintextToken)
 
 	if err != nil {
 		return PersonalAccessTokenResponse{}, err

@@ -2,13 +2,36 @@ package caching
 
 import (
 	"github.com/muesli/cache2go"
+	"github.com/rama-adi/RyFT-Framework/app/cache"
 	"github.com/rama-adi/RyFT-Framework/framework/configuration"
+	"github.com/rama-adi/RyFT-Framework/framework/logging"
 	"time"
 )
 
 type CacheTable struct {
+	Name   string
 	Table  *cache2go.CacheTable
 	Config configuration.Configuration
+}
+
+func LoadCacheTable(config configuration.Configuration, logger logging.ApplicationLogger) map[string]CacheTable {
+
+	if config.Caching.Enabled == false {
+		return nil
+	}
+	userCacheData := cache.UserDefinedCacheTable()
+	initMap := make(map[string]CacheTable)
+
+	for _, value := range userCacheData {
+		logger.InfoLogger.Printf("Loading cache table %s", value)
+		initMap[value] = CacheTable{
+			Name:   value,
+			Table:  cache2go.Cache(value),
+			Config: config,
+		}
+	}
+
+	return initMap
 }
 
 func (cacheTable CacheTable) CacheOrMake(

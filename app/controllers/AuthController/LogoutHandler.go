@@ -20,7 +20,8 @@ func LogoutHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	err = app.CacheTable.Auth.BustCache("user:bytoken:" + token)
+	// Remove the token and user from the cache
+	err = app.CacheTable["authToken"].BustCache(token)
 
 	if err != nil {
 		app.Logger.ErrorLogger.Println(err)

@@ -24,7 +24,7 @@ func WithAuthenticationData(c *fiber.Ctx) error {
 
 	rep := strings.Replace(authorizationHeader, "Bearer ", "", 1)
 
-	userCache, err := app.CacheTable.Auth.CacheOrMake("user:bytoken:"+rep, func() (interface{}, error, time.Duration) {
+	userCache, err := app.CacheTable["authToken"].CacheOrMake(rep, func() (interface{}, error, time.Duration) {
 		fromAccessToken, fromAccessTokenError := models.User{}.FromAccessToken(rep)
 		return fromAccessToken, fromAccessTokenError, time.Until(models.PersonalAccessToken{}.Find(rep).ExpiresAt)
 	})

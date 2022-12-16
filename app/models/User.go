@@ -21,7 +21,7 @@ func (_ User) Login(email string, password string) (*User, error) {
 
 	app.DB.Where("email = ?", email).First(&user)
 
-	if app.Utilities.VerifyPassword(password, user.Password) {
+	if app.Utilities.Crypto.VerifyPassword(password, user.Password) {
 		return &user, nil
 	}
 
@@ -48,7 +48,7 @@ func (_ User) FromAccessToken(token string) (*User, error) {
 
 	var personalAccessToken PersonalAccessToken
 
-	enc, err := app.Utilities.EncryptWithAppKey(token)
+	enc, err := app.Utilities.Crypto.EncryptWithAppKey(token)
 
 	if err != nil {
 		return nil, err

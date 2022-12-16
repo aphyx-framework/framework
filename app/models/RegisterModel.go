@@ -15,7 +15,7 @@ func RegisteredModels() []Model {
 			Seeder: &database.SeederDefinition{
 				Amount: 10,
 				Run: func(db *gorm.DB) error {
-					password, err := app.Utilities.HashPassword("password")
+					password, err := app.Utilities.Crypto.HashPassword("password")
 
 					if err != nil {
 						return err

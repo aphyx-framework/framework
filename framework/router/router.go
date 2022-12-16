@@ -4,9 +4,9 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/rama-adi/RyFT-Framework/app/middlewares"
 	routing2 "github.com/rama-adi/RyFT-Framework/app/routing"
-	"github.com/rama-adi/RyFT-Framework/app/utils"
 	"github.com/rama-adi/RyFT-Framework/framework/configuration"
 	"github.com/rama-adi/RyFT-Framework/framework/logging"
+	"github.com/rama-adi/RyFT-Framework/framework/utils"
 	"net/http"
 )
 

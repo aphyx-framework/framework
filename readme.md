@@ -1,25 +1,23 @@
-# Ryft Framework
-
-Ryft Framework is a lightweight and efficient web development framework written in Go. It utilizes popular libraries
-like GORM for ORM, FX for Dependency Injection, and Fiber for HTTP handling. Our goal is to provide a well-rounded and
-easy for beginner framework that allows developers to quickly and easily create web apps in go easily.
+# Aphyx GO framework
 
 > **Warning**
 > This framework is still in alpha testing. We're frequently pushing updates and overhaul so your current version might
 > be outdated. Please check back often for updates.
 
-## Language
-
-Go
-
-## Features
+Aphyx GO framework is a lightweight and efficient API development framework written in Go. It utilizes popular libraries
+like GORM for ORM, FX for Dependency Injection, and Fiber for HTTP handling. Our goal is to provide a well-rounded and
+easy for beginner REST API framework that allows developers to quickly and easily create web apps in go.
 
 - ORM via GORM
 - Dependency Injection via FX
 - HTTP Library via Fiber
 - Model and Seeder Definition - all made from scratch
-- Niceties: authentication via token, helper functions, routing
+- Niceties: helper functions, routing
 - CLI tools for migration, creating boilerplate, etc.
+
+## First party modules
+Utilize our first party modules to write less boilerplate code and focus on your business logic.
+- [auth-module](https://github.com/aphyx-framework/auth-module) Provides an easy-to-use authentication module (WIP)
 
 ## Documentation
 
@@ -27,7 +25,7 @@ Work in progress
 
 ## Getting Started
 
-1. Clone repository from https://github.com/rama-adi/RyFT-Framework
+1. Clone repository from https://github.com/aphyx-framework/framework
 2. Rename the module name in the `go.mod` to be aligned with your project
 3. Copy `.example.config.toml` and name it `config.toml` in the root folder
 4. Change the app name, port
@@ -37,7 +35,7 @@ Work in progress
 
 ## Contributing
 
-We welcome and appreciate any contributions to Ryft Framework! To contribute, please follow these steps:
+We welcome and appreciate any contributions to Aphyx Framework! To contribute, please follow these steps:
 
 1. Fork the repository
 2. Create a new branch for your changes

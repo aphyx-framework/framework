@@ -1,4 +1,6 @@
-# Aphyx GO framework
+<p align="center"><a href="https://github.com/aphyx-framework/framework" target="_blank"><img src="https://i.vgy.me/6hD4rq.png" width="600" alt="Aphyx Logo"></a></p>
+
+## About Aphyx GO framework
 
 > **Warning**
 > This framework is still in alpha testing. We're frequently pushing updates and overhaul so your current version might
@@ -16,7 +18,9 @@ easy for beginner REST API framework that allows developers to quickly and easil
 - CLI tools for migration, creating boilerplate, etc.
 
 ## First party modules
+
 Utilize our first party modules to write less boilerplate code and focus on your business logic.
+
 - [auth-module](https://github.com/aphyx-framework/auth-module) Provides an easy-to-use authentication module (WIP)
 
 ## Documentation

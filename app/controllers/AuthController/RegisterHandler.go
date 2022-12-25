@@ -3,11 +3,11 @@ package AuthController
 import (
 	"encoding/json"
 	"errors"
+	"github.com/aphyx-framework/framework/app"
+	"github.com/aphyx-framework/framework/app/models"
+	utils2 "github.com/aphyx-framework/framework/framework/utils"
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/gofiber/fiber/v2"
-	"github.com/rama-adi/RyFT-Framework/app"
-	"github.com/rama-adi/RyFT-Framework/app/models"
-	utils2 "github.com/rama-adi/RyFT-Framework/framework/utils"
 	"gorm.io/gorm"
 	"net/mail"
 )

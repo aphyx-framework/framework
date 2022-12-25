@@ -2,7 +2,7 @@ package maker
 
 import (
 	"github.com/TwiN/go-color"
-	"github.com/rama-adi/RyFT-Framework/framework/logging"
+	"github.com/aphyx-framework/framework/framework/logging"
 	"os"
 	"strings"
 )

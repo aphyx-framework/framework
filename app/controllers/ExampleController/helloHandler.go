@@ -1,9 +1,9 @@
 package ExampleController
 
 import (
+	"github.com/aphyx-framework/framework/app"
+	"github.com/aphyx-framework/framework/framework/utils"
 	"github.com/gofiber/fiber/v2"
-	"github.com/rama-adi/RyFT-Framework/app"
-	"github.com/rama-adi/RyFT-Framework/framework/utils"
 )
 
 // HelloHandler ---

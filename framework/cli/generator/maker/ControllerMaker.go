@@ -1,7 +1,7 @@
 package maker
 
 import (
-	"github.com/rama-adi/RyFT-Framework/framework/logging"
+	"github.com/aphyx-framework/framework/framework/logging"
 )
 
 func ControllerMakerInfo(logger logging.ApplicationLogger) {

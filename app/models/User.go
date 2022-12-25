@@ -2,8 +2,8 @@ package models
 
 import (
 	"errors"
+	"github.com/aphyx-framework/framework/app"
 	"github.com/gofiber/fiber/v2"
-	"github.com/rama-adi/RyFT-Framework/app"
 	"gorm.io/gorm"
 	"time"
 )

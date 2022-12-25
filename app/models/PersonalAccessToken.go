@@ -1,7 +1,7 @@
 package models
 
 import (
-	"github.com/rama-adi/RyFT-Framework/app"
+	"github.com/aphyx-framework/framework/app"
 	"gorm.io/gorm"
 	"time"
 )

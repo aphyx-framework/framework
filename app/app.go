@@ -1,10 +1,10 @@
 package app
 
 import (
-	"github.com/rama-adi/RyFT-Framework/framework/caching"
-	"github.com/rama-adi/RyFT-Framework/framework/configuration"
-	"github.com/rama-adi/RyFT-Framework/framework/logging"
-	"github.com/rama-adi/RyFT-Framework/framework/utils"
+	"github.com/aphyx-framework/framework/framework/caching"
+	"github.com/aphyx-framework/framework/framework/configuration"
+	"github.com/aphyx-framework/framework/framework/logging"
+	"github.com/aphyx-framework/framework/framework/utils"
 	"go.uber.org/fx"
 	"gorm.io/gorm"
 )

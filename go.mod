@@ -1,4 +1,4 @@
-module github.com/rama-adi/RyFT-Framework
+module github.com/aphyx-framework/framework
 
 go 1.19
 

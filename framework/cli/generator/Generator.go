@@ -1,8 +1,8 @@
 package generator
 
 import (
-	"github.com/rama-adi/RyFT-Framework/framework/cli/generator/maker"
-	"github.com/rama-adi/RyFT-Framework/framework/logging"
+	"github.com/aphyx-framework/framework/framework/cli/generator/maker"
+	"github.com/aphyx-framework/framework/framework/logging"
 	"golang.org/x/mod/modfile"
 	"os"
 )

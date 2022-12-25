@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/rama-adi/RyFT-Framework/framework"
-	"github.com/rama-adi/RyFT-Framework/framework/cli"
+	"github.com/aphyx-framework/framework/framework"
+	"github.com/aphyx-framework/framework/framework/cli"
 	"os"
 )
 

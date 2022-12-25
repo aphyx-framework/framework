@@ -2,8 +2,8 @@ package migration
 
 import (
 	"github.com/TwiN/go-color"
-	"github.com/rama-adi/RyFT-Framework/app/models"
-	"github.com/rama-adi/RyFT-Framework/framework/logging"
+	"github.com/aphyx-framework/framework/app/models"
+	"github.com/aphyx-framework/framework/framework/logging"
 	"gorm.io/gorm"
 )
 

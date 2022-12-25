@@ -2,10 +2,10 @@ package AuthController
 
 import (
 	"encoding/json"
+	models2 "github.com/aphyx-framework/framework/app/models"
+	"github.com/aphyx-framework/framework/framework/utils"
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/gofiber/fiber/v2"
-	models2 "github.com/rama-adi/RyFT-Framework/app/models"
-	"github.com/rama-adi/RyFT-Framework/framework/utils"
 )
 
 type UserLogin struct {

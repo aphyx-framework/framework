@@ -1,12 +1,12 @@
 package router
 
 import (
+	"github.com/aphyx-framework/framework/app/middlewares"
+	routing2 "github.com/aphyx-framework/framework/app/routing"
+	"github.com/aphyx-framework/framework/framework/configuration"
+	"github.com/aphyx-framework/framework/framework/logging"
+	"github.com/aphyx-framework/framework/framework/utils"
 	"github.com/gofiber/fiber/v2"
-	"github.com/rama-adi/RyFT-Framework/app/middlewares"
-	routing2 "github.com/rama-adi/RyFT-Framework/app/routing"
-	"github.com/rama-adi/RyFT-Framework/framework/configuration"
-	"github.com/rama-adi/RyFT-Framework/framework/logging"
-	"github.com/rama-adi/RyFT-Framework/framework/utils"
 	"net/http"
 )
 

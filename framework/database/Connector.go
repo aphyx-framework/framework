@@ -2,7 +2,7 @@ package database
 
 import (
 	"fmt"
-	"github.com/rama-adi/RyFT-Framework/framework/configuration"
+	"github.com/aphyx-framework/framework/framework/configuration"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )

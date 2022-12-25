@@ -1,8 +1,8 @@
 package routing
 
 import (
+	AuthController2 "github.com/aphyx-framework/framework/app/controllers/AuthController"
 	"github.com/gofiber/fiber/v2"
-	AuthController2 "github.com/rama-adi/RyFT-Framework/app/controllers/AuthController"
 )
 
 // AuthRoutes ---

@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"github.com/rama-adi/RyFT-Framework/framework/configuration"
+	"github.com/aphyx-framework/framework/framework/configuration"
 )
 
 type BuiltinUtilities struct {

@@ -1,9 +1,9 @@
 package startupPrinter
 
 import (
-	"github.com/rama-adi/RyFT-Framework/framework/caching"
-	"github.com/rama-adi/RyFT-Framework/framework/configuration"
-	"github.com/rama-adi/RyFT-Framework/framework/logging"
+	"github.com/aphyx-framework/framework/framework/caching"
+	"github.com/aphyx-framework/framework/framework/configuration"
+	"github.com/aphyx-framework/framework/framework/logging"
 )
 
 func PrintStartupInfo(

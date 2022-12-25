@@ -2,7 +2,7 @@ package startupPrinter
 
 import (
 	"github.com/TwiN/go-color"
-	"github.com/rama-adi/RyFT-Framework/framework/configuration"
+	"github.com/aphyx-framework/framework/framework/configuration"
 )
 
 func printEnabledFeatures(config configuration.Configuration) {

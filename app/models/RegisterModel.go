@@ -1,9 +1,9 @@
 package models
 
 import (
+	"github.com/aphyx-framework/framework/app"
+	"github.com/aphyx-framework/framework/framework/database"
 	"github.com/brianvoe/gofakeit/v6"
-	"github.com/rama-adi/RyFT-Framework/app"
-	"github.com/rama-adi/RyFT-Framework/framework/database"
 	"gorm.io/gorm"
 )
 

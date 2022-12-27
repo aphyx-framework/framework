@@ -1,7 +1,7 @@
 package generator
 
 import (
-	"github.com/aphyx-framework/framework/framework/cli/generator/maker"
+	"github.com/aphyx-framework/framework/framework/commands/generator/maker"
 	"github.com/aphyx-framework/framework/framework/logging"
 	"golang.org/x/mod/modfile"
 	"os"

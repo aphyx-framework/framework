@@ -13,7 +13,7 @@ type PlaceholderReplacer struct {
 }
 
 func loadStubFile(stubFile string, logger logging.ApplicationLogger) string {
-	fileByte, err := os.ReadFile("./framework/cli/generator/stubs/" + stubFile + ".stub")
+	fileByte, err := os.ReadFile("./framework/commands/generator/stubs/" + stubFile + ".stub")
 	if err != nil {
 		logger.ErrorLogger.Panicln("Failed to read stub file", err)
 	}

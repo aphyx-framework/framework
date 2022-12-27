@@ -8,9 +8,9 @@ import (
 
 // ApplicationLogger ---
 //
-// This function is used to log messages to the console
-// It will log the message to the console with the appropriate color
-// on *nix systems or in the console based on the type of message
+// This function is used to log messages to the commands
+// It will log the message to the commands with the appropriate color
+// on *nix systems or in the commands based on the type of message
 type ApplicationLogger struct {
 	InfoLogger    *log.Logger
 	WarningLogger *log.Logger

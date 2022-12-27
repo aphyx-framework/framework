@@ -1,10 +1,11 @@
-package command
+package cli
 
 type Command struct {
-	Name        string
+	Command     string
+	Title       string
 	Description string
 	Args        map[string]string
-	Handler     func()
+	Handler     func(arg ...string)
 }
 
 type Registry struct {

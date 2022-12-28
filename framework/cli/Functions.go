@@ -110,3 +110,11 @@ func (c CommandArgumentValue) ArgumentExist(key string) bool {
 
 	return false
 }
+
+func (c CommandArgumentValue) ArgumentOnly(key string) bool {
+	return len(c.Store) == 1 && c.ArgumentExist(key)
+}
+
+func (c CommandArgumentValue) NoArguments() bool {
+	return len(c.Store) == 0
+}

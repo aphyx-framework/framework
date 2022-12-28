@@ -109,10 +109,8 @@ func printHelp(command Command) {
 	// If the command has arguments, print the arguments table
 	if len(command.Args) > 0 {
 		println("Arguments:")
-		println("Note that arguments are not required to be in order and are case sensitive and must be provided as a key value pair")
+		println("Note that arguments are not required to be in order and are case sensitive")
 		println("You also cannot use spaces in the key or value, or provide the key multiple times")
-		println("For arguments that does not require a value, you will still need to pass them")
-		println("with the semicolon (:) character. Example: arg1:")
 		argsTable := simpletable.New()
 		argsTable.SetStyle(StyleThinUnicode)
 		argsTable.Header = &simpletable.Header{

@@ -28,10 +28,10 @@ func Definition(registry cli.Registry, logger logging.ApplicationLogger, db *gor
 			},
 		},
 		ExampleUsage: map[string]string{
-			"migrate":              "This will run the migration without dropping the tables or running the seeder.",
-			"migrate fresh:":       "This will drop all tables and re-run all migrations.",
-			"migrate fresh: seed:": "This will drop all tables and re-run all migrations, then run the seeder.",
-			"migrate seed:":        "This will run the seeder only.",
+			"migrate":            "This will run the migration without dropping the tables or running the seeder.",
+			"migrate fresh":      "This will drop all tables and re-run all migrations.",
+			"migrate fresh seed": "This will drop all tables and re-run all migrations, then run the seeder.",
+			"migrate seed":       "This will run the seeder only.",
 		},
 		Handler: func(c cli.CommandArgumentValue) {
 			logger.InfoLogger.Println(color.GreenBackground + color.Black + "                  - Migration Started -                  " + color.Reset)

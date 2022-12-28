@@ -88,6 +88,8 @@ func UnpackArguments(args []string) map[string]string {
 		if strings.Contains(arg, ":") {
 			parts := strings.Split(arg, ":")
 			store[parts[0]] = parts[1]
+		} else {
+			store[arg] = ""
 		}
 	}
 

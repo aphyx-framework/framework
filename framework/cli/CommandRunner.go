@@ -84,17 +84,17 @@ func printHelp(command Command) {
 	table.Wrap = true // wrap columns
 
 	// Print the basic information
-	table.AddRow(color.GreenBackground+color.Black+command.Command, color.Reset+"   "+command.Title)
-	table.AddRow("Description:", "   "+command.Description)
+	table.AddRow("'"+command.Command+"'", command.Title)
+	table.AddRow("Description:", command.Description)
 
 	// If there are no arguments, add a row saying that
 	if len(command.Args) < 1 {
-		table.AddRow("Arguments:", "   "+"No arguments required")
+		table.AddRow("Arguments:", "No arguments required")
 	}
 
 	// If there are no usage examples, add a row saying that
 	if len(command.ExampleUsage) < 1 {
-		table.AddRow("Usages:", "   "+"Command does not provide any example usages")
+		table.AddRow("Usages:", "Command does not provide any example usages")
 	}
 
 	// Print the command table
@@ -109,6 +109,10 @@ func printHelp(command Command) {
 	// If the command has arguments, print the arguments table
 	if len(command.Args) > 0 {
 		println("Arguments:")
+		println("Note that arguments are not required to be in order and are case sensitive and must be provided as a key value pair")
+		println("You also cannot use spaces in the key or value, or provide the key multiple times")
+		println("For arguments that does not require a value, you will still need to pass them")
+		println("with the semicolon (:) character. Example: arg1:")
 		argsTable := simpletable.New()
 		argsTable.SetStyle(StyleThinUnicode)
 		argsTable.Header = &simpletable.Header{
@@ -159,4 +163,6 @@ func printHelp(command Command) {
 		println("Usages:")
 		fmt.Println(usageTable.String())
 	}
+
+	println("Please scroll up to see the full output...")
 }

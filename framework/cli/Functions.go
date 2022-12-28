@@ -102,3 +102,11 @@ func (c CommandArgumentValue) GetArgument(key string, defaultValue string) strin
 
 	return defaultValue
 }
+
+func (c CommandArgumentValue) ArgumentExist(key string) bool {
+	if _, ok := c.Store[key]; ok {
+		return true
+	}
+
+	return false
+}

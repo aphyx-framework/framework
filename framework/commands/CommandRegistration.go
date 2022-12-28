@@ -1,12 +1,14 @@
 package commands
 
 import (
+	"github.com/aphyx-framework/framework/framework/commands/HelpCommand"
+	"github.com/aphyx-framework/framework/framework/commands/MigrateCommand"
 	"go.uber.org/fx"
 )
 
 var FrameworkCommands = fx.Options(
-	fx.Invoke(HelpCommand),
-	fx.Invoke(ExampleCommand),
+	fx.Invoke(HelpCommand.Definition),
+	fx.Invoke(MigrateCommand.Definition),
 )
 
 //func RunCliApplication(enableNopLogger bool) {

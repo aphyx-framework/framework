@@ -56,14 +56,23 @@ func RunCommand(registry Registry) {
 	if helpMode == false {
 
 		// Check if the arguments satisfies the requirements
-		if len(args) < len(commandResult.Args) {
+		if commandResult.HasCorrectAmountOfArgs(args) == false {
 			println(color.RedBackground + color.White + " Error: " + color.Reset + "  Not enough arguments provided")
-			println("Expected: " + fmt.Sprintf("%d", len(commandResult.Args)) + " arguments")
-			println("Received: " + fmt.Sprintf("%d", len(args)) + " arguments")
-			os.Exit(1)
-		}
+			println("expected " + fmt.Sprintf("%d", len(commandResult.Args)) + " arguments but got " + fmt.Sprintf("%d", len(args)))
+			println("You are missing this arguments:")
 
-		commandResult.Handler(args...)
+			// Print the missing arguments
+			for _, arg := range commandResult.FindMissingArgs(args) {
+				println(" - " + arg.Name + " (" + arg.Description + ")")
+			}
+
+			os.Exit(1)
+		} else {
+			// Run the command with the arguments (if any)
+			commandResult.Handler(CommandArgumentValue{
+				Store: UnpackArguments(args),
+			})
+		}
 	}
 
 	os.Exit(0)

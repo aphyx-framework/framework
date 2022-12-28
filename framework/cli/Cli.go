@@ -6,7 +6,7 @@ type Command struct {
 	Description  string
 	Args         []CommandArgument
 	ExampleUsage map[string]string
-	Handler      func(arg ...string)
+	Handler      func(c CommandArgumentValue)
 }
 
 type CommandArgument struct {
@@ -14,6 +14,10 @@ type CommandArgument struct {
 	Description string
 	Required    bool
 	Flag        bool
+}
+
+type CommandArgumentValue struct {
+	Store map[string]string
 }
 
 type Registry struct {

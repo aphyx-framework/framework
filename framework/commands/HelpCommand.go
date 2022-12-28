@@ -16,7 +16,7 @@ func HelpCommand(registry cli.Registry) {
 		ExampleUsage: map[string]string{
 			"help": "Displays all of the available commands",
 		},
-		Handler: func(arg ...string) {
+		Handler: func(c cli.CommandArgumentValue) {
 			helpCommandHandler(registry)
 		},
 	}

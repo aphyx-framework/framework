@@ -52,15 +52,17 @@ func RunCommand(registry Registry) {
 		}
 	}
 
-	// Check if the arguments satisfies the requirements
-	if len(args) < len(commandResult.Args) {
-		println(color.RedBackground + color.White + " Error: " + color.Reset + "  Not enough arguments provided")
-		println("Expected: " + fmt.Sprintf("%d", len(commandResult.Args)) + " arguments")
-		println("Received: " + fmt.Sprintf("%d", len(args)) + " arguments")
-		os.Exit(1)
-	}
-
+	// If the help flag is not present, run the command
 	if helpMode == false {
+
+		// Check if the arguments satisfies the requirements
+		if len(args) < len(commandResult.Args) {
+			println(color.RedBackground + color.White + " Error: " + color.Reset + "  Not enough arguments provided")
+			println("Expected: " + fmt.Sprintf("%d", len(commandResult.Args)) + " arguments")
+			println("Received: " + fmt.Sprintf("%d", len(args)) + " arguments")
+			os.Exit(1)
+		}
+
 		commandResult.Handler(args...)
 	}
 
@@ -72,18 +74,41 @@ func printHelp(command Command) {
 	table.MaxColWidth = 80
 	table.Wrap = true // wrap columns
 
-	joinedArgs := "Arguments are not required"
+	// Print the basic information
+	table.AddRow(color.GreenBackground+color.Black+command.Command, color.Reset+"   "+command.Title)
+	table.AddRow("Description:", "   "+command.Description)
 
-	argsTable := simpletable.New()
-	argsTable.Header = &simpletable.Header{
-		Cells: []*simpletable.Cell{
-			{Align: simpletable.AlignLeft, Text: "Usage"},
-			{Align: simpletable.AlignLeft, Text: "Description"},
-			{Align: simpletable.AlignLeft, Text: "Required?"},
-		},
+	// If there are no arguments, add a row saying that
+	if len(command.Args) < 1 {
+		table.AddRow("Arguments:", "   "+"No arguments required")
 	}
 
+	// If there are no usage examples, add a row saying that
+	if len(command.ExampleUsage) < 1 {
+		table.AddRow("Usages:", "   "+"Command does not provide any example usages")
+	}
+
+	// Print the command table
+	fmt.Println(table)
+
+	// Indicates that the command provides arguments or example usages
+	if len(command.ExampleUsage) > 0 || len(command.Args) > 0 {
+		println()
+		println(color.GreenBackground + color.Black + "      This command provides example usages or arguments.      " + color.Reset)
+	}
+
+	// If the command has arguments, print the arguments table
 	if len(command.Args) > 0 {
+		println("Arguments:")
+		argsTable := simpletable.New()
+		argsTable.SetStyle(StyleThinUnicode)
+		argsTable.Header = &simpletable.Header{
+			Cells: []*simpletable.Cell{
+				{Align: simpletable.AlignLeft, Text: "Usage"},
+				{Align: simpletable.AlignLeft, Text: "Description"},
+				{Align: simpletable.AlignLeft, Text: "Required?"},
+			},
+		}
 		for _, arg := range command.Args {
 
 			required := "X"
@@ -100,34 +125,7 @@ func printHelp(command Command) {
 			argsTable.Body.Cells = append(argsTable.Body.Cells, row)
 		}
 
-		joinedArgs = argsTable.String()
-	}
-
-	// Print the basic information
-	table.AddRow(color.GreenBackground+color.Black+command.Command, color.Reset+"   "+command.Title)
-	table.AddRow("Description:", "   "+command.Description)
-
-	// If there are no arguments, add a row saying that
-	if len(command.Args) < 1 {
-		table.AddRow("Arguments:", "   "+joinedArgs)
-	}
-
-	// If there are no usage examples, add a row saying that
-	if len(command.ExampleUsage) < 1 {
-		table.AddRow("Usages:", "   "+"Command does not provide any example usages")
-	}
-
-	// Print the command table
-	fmt.Println(table)
-
-	// If the command has arguments, print the arguments table
-	if len(command.Args) > 0 {
-		println("Arguments:")
-		fmt.Println(joinedArgs)
-	}
-
-	if len(command.ExampleUsage) > 0 || len(command.Args) > 0 {
-		println(color.GreenBackground + color.Black + "      This command provides example usages or arguments.      " + color.Reset)
+		fmt.Println(argsTable)
 	}
 
 	// If the command has example usages, print the example usages

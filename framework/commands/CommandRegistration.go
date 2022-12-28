@@ -6,6 +6,7 @@ import (
 
 var FrameworkCommands = fx.Options(
 	fx.Invoke(HelpCommand),
+	fx.Invoke(ExampleCommand),
 )
 
 //func RunCliApplication(enableNopLogger bool) {

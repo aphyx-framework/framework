@@ -2,6 +2,7 @@ package commands
 
 import (
 	"github.com/aphyx-framework/framework/framework/commands/HelpCommand"
+	"github.com/aphyx-framework/framework/framework/commands/MakeControllerCommand"
 	"github.com/aphyx-framework/framework/framework/commands/MigrateCommand"
 	"go.uber.org/fx"
 )
@@ -9,6 +10,7 @@ import (
 var FrameworkCommands = fx.Options(
 	fx.Invoke(HelpCommand.Definition),
 	fx.Invoke(MigrateCommand.Definition),
+	fx.Invoke(MakeControllerCommand.Definition),
 )
 
 //func RunCliApplication(enableNopLogger bool) {

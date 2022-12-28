@@ -12,7 +12,6 @@ func getModuleName(logger logging.ApplicationLogger) string {
 	if err != nil {
 		logger.ErrorLogger.Fatalln("Failed to read go.mod file", err)
 	}
-
 	modName := modfile.ModulePath(goModBytes)
 
 	return modName

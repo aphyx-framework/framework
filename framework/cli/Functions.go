@@ -46,7 +46,7 @@ func (c Command) HasCorrectAmountOfArgs(args []string) bool {
 	}
 
 	// Check if the amount of required args is correct
-	return len(requiredArgs) == specifiedRequiredArgs
+	return specifiedRequiredArgs >= len(requiredArgs)
 }
 
 func (c Command) FindMissingArgs(args []string) []CommandArgument {
@@ -82,9 +82,13 @@ func (c Command) FindMissingArgs(args []string) []CommandArgument {
 func UnpackArguments(args []string) map[string]string {
 	store := make(map[string]string)
 
+	// Unpack arguments
 	for _, arg := range args {
-		parts := strings.Split(arg, ":")
-		store[parts[0]] = parts[1]
+		// Split the argument into key and value
+		if strings.Contains(arg, ":") {
+			parts := strings.Split(arg, ":")
+			store[parts[0]] = parts[1]
+		}
 	}
 
 	return store

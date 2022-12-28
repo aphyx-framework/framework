@@ -3,11 +3,34 @@ package cli
 import (
 	"fmt"
 	"github.com/TwiN/go-color"
+	"github.com/alexeyco/simpletable"
 	"github.com/gosuri/uitable"
 	"os"
 )
 
-func RunCommandFromConsole(registry Registry) {
+var StyleThinUnicode = &simpletable.Style{
+	Border: &simpletable.BorderStyle{
+		TopLeft:            "┌",
+		Top:                "─",
+		TopRight:           "┐",
+		Right:              "│",
+		BottomRight:        "┘",
+		Bottom:             "─",
+		BottomLeft:         "└",
+		Left:               "│",
+		TopIntersection:    "┬",
+		BottomIntersection: "┴",
+	},
+	Divider: &simpletable.DividerStyle{
+		Left:         "├",
+		Center:       "─",
+		Right:        "┤",
+		Intersection: "┼",
+	},
+	Cell: "│",
+}
+
+func RunCommand(registry Registry) {
 
 	command := os.Args[1]
 	args := os.Args[2:]
@@ -49,39 +72,84 @@ func printHelp(command Command) {
 	table.MaxColWidth = 80
 	table.Wrap = true // wrap columns
 
-	joinedArgs := "[No arguments needed]"
-	argsTable := uitable.New()
-	argsTable.MaxColWidth = 80
-	argsTable.Wrap = true // wrap columns
+	joinedArgs := "Arguments are not required"
+
+	argsTable := simpletable.New()
+	argsTable.Header = &simpletable.Header{
+		Cells: []*simpletable.Cell{
+			{Align: simpletable.AlignLeft, Text: "Usage"},
+			{Align: simpletable.AlignLeft, Text: "Description"},
+			{Align: simpletable.AlignLeft, Text: "Required?"},
+		},
+	}
 
 	if len(command.Args) > 0 {
-
 		for _, arg := range command.Args {
-			argsTable.AddRow(arg.Name, "► "+arg.Description+" (Required: "+fmt.Sprintf("%t", arg.Required)+")")
+
+			required := "X"
+
+			if arg.Required {
+				required = "✓"
+			}
+
+			row := []*simpletable.Cell{
+				{Align: simpletable.AlignLeft, Text: arg.Name},
+				{Align: simpletable.AlignLeft, Text: arg.Description},
+				{Align: simpletable.AlignLeft, Text: required},
+			}
+			argsTable.Body.Cells = append(argsTable.Body.Cells, row)
 		}
 
-		// Join the slice with commas
 		joinedArgs = argsTable.String()
 	}
 
+	// Print the basic information
 	table.AddRow(color.GreenBackground+color.Black+command.Command, color.Reset+"   "+command.Title)
 	table.AddRow("Description:", "   "+command.Description)
-	table.AddRow("Arguments:", "   "+joinedArgs)
 
+	// If there are no arguments, add a row saying that
+	if len(command.Args) < 1 {
+		table.AddRow("Arguments:", "   "+joinedArgs)
+	}
+
+	// If there are no usage examples, add a row saying that
 	if len(command.ExampleUsage) < 1 {
-		table.AddRow("Usages:", "   "+"[No usage example available]")
-	} else {
-		usageTable := uitable.New()
-		usageTable.MaxColWidth = 80
-		usageTable.Wrap = true // wrap columns
+		table.AddRow("Usages:", "   "+"Command does not provide any example usages")
+	}
 
-		for usage, description := range command.ExampleUsage {
-			usageTable.AddRow("   - "+usage, "► "+description)
+	// Print the command table
+	fmt.Println(table)
+
+	// If the command has arguments, print the arguments table
+	if len(command.Args) > 0 {
+		println("Arguments:")
+		fmt.Println(joinedArgs)
+	}
+
+	if len(command.ExampleUsage) > 0 || len(command.Args) > 0 {
+		println(color.GreenBackground + color.Black + "      This command provides example usages or arguments.      " + color.Reset)
+	}
+
+	// If the command has example usages, print the example usages
+	if len(command.ExampleUsage) > 0 {
+		usageTable := simpletable.New()
+		usageTable.SetStyle(StyleThinUnicode)
+		usageTable.Header = &simpletable.Header{
+			Cells: []*simpletable.Cell{
+				{Align: simpletable.AlignLeft, Text: "Usage"},
+				{Align: simpletable.AlignLeft, Text: "Description"},
+			},
 		}
 
-		table.AddRow("Usages:", usageTable.String())
-	}
-	table.AddRow("") // blank
+		for usage, description := range command.ExampleUsage {
+			row := []*simpletable.Cell{
+				{Align: simpletable.AlignLeft, Text: usage},
+				{Align: simpletable.AlignLeft, Text: description},
+			}
+			usageTable.Body.Cells = append(usageTable.Body.Cells, row)
+		}
 
-	fmt.Println(table)
+		println("Usages:")
+		fmt.Println(usageTable.String())
+	}
 }

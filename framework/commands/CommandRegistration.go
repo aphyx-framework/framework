@@ -1,66 +1,12 @@
 package commands
 
 import (
-	"fmt"
-	"github.com/TwiN/go-color"
-	"github.com/aphyx-framework/framework/framework/cli"
-	"github.com/gosuri/uitable"
 	"go.uber.org/fx"
-	"os"
-	"strings"
 )
 
 var FrameworkCommands = fx.Options(
-	fx.Invoke(TestCommand),
 	fx.Invoke(HelpCommand),
 )
-
-func RunCommand(registry cli.Registry) {
-	command := os.Args[1]
-	args := os.Args[2:]
-
-	commandResult, err := registry.GetCommand(command)
-
-	if err != nil {
-		panic(err)
-	}
-
-	for _, arg := range args {
-		if arg == "--help" {
-			printHelp(commandResult)
-		}
-
-	}
-
-	commandResult.Handler(args...)
-	os.Exit(0)
-}
-
-func printHelp(command cli.Command) {
-	table := uitable.New()
-	table.MaxColWidth = 80
-	table.Wrap = true // wrap columns
-
-	joinedArgs := "[No arguments needed]"
-
-	if len(command.Args) > 0 {
-		args := make([]string, 0, len(command.Args))
-		for k := range command.Args {
-			args = append(args, k)
-		}
-
-		// Join the slice with commas
-		joinedArgs = strings.Join(args, ", ")
-	}
-
-	table.AddRow(color.GreenBackground+color.Black+command.Command, color.Reset+"   "+command.Title)
-	table.AddRow("Description:", "   "+command.Description)
-	table.AddRow("Arguments:", "   "+joinedArgs)
-	table.AddRow("Usages:", "   "+"Type in `"+command.Command+" --help` for usage example")
-	table.AddRow("") // blank
-
-	fmt.Println(table)
-}
 
 //func RunCliApplication(enableNopLogger bool) {
 //	nop := fx.Options()

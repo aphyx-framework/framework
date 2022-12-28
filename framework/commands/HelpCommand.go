@@ -5,7 +5,6 @@ import (
 	"github.com/TwiN/go-color"
 	"github.com/aphyx-framework/framework/framework/cli"
 	"github.com/gosuri/uitable"
-	"strings"
 )
 
 func HelpCommand(registry cli.Registry) {
@@ -13,7 +12,10 @@ func HelpCommand(registry cli.Registry) {
 		Command:     "help",
 		Title:       "CLI Help",
 		Description: "Displays all of the available commands",
-		Args:        map[string]string{},
+		Args:        []cli.CommandArgument{},
+		ExampleUsage: map[string]string{
+			"help": "Displays all of the available commands",
+		},
 		Handler: func(arg ...string) {
 			helpCommandHandler(registry)
 		},
@@ -23,27 +25,17 @@ func HelpCommand(registry cli.Registry) {
 
 func helpCommandHandler(registry cli.Registry) {
 	println(color.CyanBackground + color.Black + " Apyhx Framework Commands: " + color.Reset)
+	println("Info: add --help to the command for more information")
+	println()
+
 	table := uitable.New()
 	table.MaxColWidth = 80
 	table.Wrap = true // wrap columns
 
 	for _, command := range registry.GetCommands() {
 
-		joinedArgs := "[No arguments needed]"
-
-		if len(command.Args) > 0 {
-			args := make([]string, 0, len(command.Args))
-			for k := range command.Args {
-				args = append(args, k)
-			}
-
-			// Join the slice with commas
-			joinedArgs = strings.Join(args, ", ")
-		}
-
 		table.AddRow(color.GreenBackground+color.Black+command.Command, color.Reset+"   "+command.Title)
 		table.AddRow("Description:", "   "+command.Description)
-		table.AddRow("Arguments:", "   "+joinedArgs)
 		table.AddRow("") // blank
 	}
 

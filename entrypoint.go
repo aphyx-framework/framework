@@ -7,7 +7,7 @@ import (
 
 func main() {
 	// If you want to debug the DI container, set this to true
-	const EnableFxLogger = true
+	const EnableFxLogger = false
 
 	if len(os.Args) < 2 {
 		framework.BoostrapKernel(EnableFxLogger, false) // If no argument is passed, start the server

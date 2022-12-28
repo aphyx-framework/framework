@@ -43,7 +43,7 @@ func BoostrapKernel(enableFxLogger bool, cliMode bool) {
 		server = fx.Options(
 			fx.Provide(cli.MakeRegistry), // Make a new registry for the CLI commands
 			commands.FrameworkCommands,   // Commands from the framework
-			fx.Invoke(commands.RunCommand),
+			fx.Invoke(cli.RunCommandFromConsole),
 		)
 	}
 

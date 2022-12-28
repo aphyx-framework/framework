@@ -20,3 +20,12 @@ func (container *Registry) GetCommand(callable string) (Command, error) {
 func (container *Registry) GetCommands() map[string]Command {
 	return container.Commands
 }
+
+func (command Command) GetArgument(name string) (CommandArgument, error) {
+	for _, arg := range command.Args {
+		if arg.Name == name {
+			return arg, nil
+		}
+	}
+	return CommandArgument{}, errors.New("Argument " + name + " not found")
+}

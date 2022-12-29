@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"github.com/aphyx-framework/framework/framework/commands/GenerateKeyCommand"
 	"github.com/aphyx-framework/framework/framework/commands/HelpCommand"
 	"github.com/aphyx-framework/framework/framework/commands/MakeControllerCommand"
 	"github.com/aphyx-framework/framework/framework/commands/MakeModelCommand"
@@ -13,6 +14,7 @@ var FrameworkCommands = fx.Options(
 	fx.Invoke(MigrateCommand.Definition),
 	fx.Invoke(MakeControllerCommand.Definition),
 	fx.Invoke(MakeModelCommand.Definition),
+	fx.Invoke(GenerateKeyCommand.Definition),
 )
 
 //func RunCliApplication(enableNopLogger bool) {

@@ -1,13 +1,12 @@
 package GenerateKeyCommand
 
 import (
-	"encoding/base64"
 	"github.com/aphyx-framework/framework/framework/cli"
 	"github.com/aphyx-framework/framework/framework/logging"
-	"math/rand"
+	"github.com/aphyx-framework/framework/framework/utils"
 )
 
-func Definition(registry cli.Registry, logger logging.ApplicationLogger) {
+func Definition(registry cli.Registry, logger logging.ApplicationLogger, utilities utils.BuiltinUtilities) {
 	cmd := cli.Command{
 		Command:     "generate-key",
 		Title:       "Generate a key for the application",
@@ -18,16 +17,7 @@ func Definition(registry cli.Registry, logger logging.ApplicationLogger) {
 		},
 		Handler: func(c cli.CommandArgumentValue) {
 			logger.InfoLogger.Println("Generating key...")
-			b := make([]byte, 32)
-			_, err := rand.Read(b)
-			if err != nil {
-				logger.ErrorLogger.Fatalln(err)
-				return
-			}
-
-			// Encode the bytes to base64
-			key := base64.StdEncoding.EncodeToString(b)
-			logger.InfoLogger.Println("Generated key: ", key)
+			logger.InfoLogger.Println("Generated key: ", utilities.Strings.Random(32))
 		},
 	}
 	registry.AddCommand(cmd)

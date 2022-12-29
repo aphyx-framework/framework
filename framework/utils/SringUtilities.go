@@ -3,6 +3,7 @@ package utils
 import (
 	"math/rand"
 	"strings"
+	"time"
 )
 
 type Strings struct{}
@@ -21,10 +22,26 @@ func (_ Strings) Replace(haystack string, needles []PlaceholderReplacer) string 
 }
 
 func (_ Strings) Random(number int) string {
-	var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-	b := make([]rune, number)
-	for i := range b {
-		b[i] = letterRunes[rand.Intn(len(letterRunes))]
+	// Seed the random number generator
+	rand.Seed(time.Now().UnixNano())
+
+	// Create a slice of runes
+	runes := []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+	// Create a byte slice to hold the random bytes
+	b := make([]byte, number)
+
+	// Generate random bytes
+	_, err := rand.Read(b)
+	if err != nil {
+		return ""
 	}
-	return string(b)
+
+	// Create a string from the random bytes
+	s := ""
+	for _, v := range b {
+		s += string(runes[int(v)%len(runes)])
+	}
+
+	return s
 }

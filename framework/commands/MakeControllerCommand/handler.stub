@@ -3,7 +3,7 @@ package __CONTROLLER_PKG_NAME__
 import (
 	"github.com/gofiber/fiber/v2"
 	"__APP_BASE_PKG__/app"
-	"__APP_BASE_PKG__/app/utils"
+	"__APP_BASE_PKG__/framework/utils"
 )
 
 // __HANDLER_PKG_NAME__
